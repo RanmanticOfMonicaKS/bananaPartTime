@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        body {
+            padding-top: 20px;
+        }
+
+        .msg_box {
+            box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .msg_box_item {
+            text-align: center;
+            -webkit-flex: 1;
+            flex: 1;
+            width: 30%;
+            height: 5rem;
+        }
+
+        .msg_box_item i {
+            padding-top: .6rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: inline-block;
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: .6rem;
+            box-shadow: 0 0 .75rem #fff;
+        }
+
+        .msg_box_item:nth-of-type(1) i {
+            /*  使用nth要注意的就是一定要拿到多i*/
+            background-image: linear-gradient(to right, #8590fb, #4cc2d7);
+        }
+
+        .msg_box_item:nth-of-type(2) i {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+        }
+
+        .msg_box_item:nth-of-type(3) i {
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="msg_box flex-sb">
+        <div class="msg_box_item" tapmode onclick="openXitongWin();">
+            <i class="fa fa-cog"></i>
+            <p>系统通知</p>
+        </div>
+        <div class="msg_box_item" tapmode onclick="openYaoyueWin();">
+            <i class="fa fa-envelope-o"></i>
+            <p>工作邀约</p>
+        </div>
+        <div class="msg_box_item" tapmode onclick="openKfWin();">
+            <i class="fa fa-smile-o"></i>
+            <p>在线客服</p>
+        </div>
+    </div>
+
+    <div class="kf_mask">
+        
+    </div>
+</body>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+
+<script>
+    // 拟态扩大范围 初始化
+    function fullMask() {
+        api.parseTapmode();
+        var headerH = $api.getStorage('headerH');
+        $('.kf_mask').css({ "top":-headerH });
+        $('.kf_mask').hide();
+
+    }
+
+    $('.kf_mask').hide();
+
+    var frames = ['msg_xitong', 'msg_gongzuo', 'msg_kefu'];
+    apiready = function () {
+        
+        api.parseTapmode();
+        fullMask();
+    }
+
+    // 打开win 
+    function openXitongWin() {
+        api.openWin({
+            name: 'msg_xitong',
+            url: 'msg_xitong.html',
+            bounces: false,
+            pageParam: {
+                key: 'userInfo'
+            }
+        });
+
+    }
+
+
+    // 工作邀约
+    function openYaoyueWin() {
+        api.openWin({
+            name: 'msg_yaoyue',
+            url: 'msg_yaoyue.html',
+            bounces: false,
+            pageParam: {
+                key: 'value'
+            }
+        });
+    }
+
+    function openKfWin() {
+        api.openFrame({
+            name: 'msg_kf',
+            url: 'msg_kf.html',
+            bounces: false,
+            pageParam: {key : 'value'},
+            bgColor:'rgba(0,0,0,.2)'
+        });
+    }
+</script>
+
+</html>

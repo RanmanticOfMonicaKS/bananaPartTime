@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../css/weui.min.css">
+
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .menu_box {
+            margin-top: 10px;
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-align-self: center;
+            align-self: center;
+        }
+
+        .menu_item {
+            padding-top: 5px;
+            text-align: center;
+            width: 23%;
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .menu_item_icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-size: cover;
+        }
+
+        .canting {
+            background-image: url('../image/img_icon/11.png');
+        }
+
+        .daogou {
+            background-image: url('../image/img_icon/12.png');
+        }
+
+        .jiajiao {
+            background-image: url('../image/img_icon/16.png');
+        }
+
+        .wenyuan {
+            background-image: url('../image/img_icon/18.png');
+        }
+
+        .tuiguang {
+            background-image: url('../image/img_icon/10.png');
+        }
+
+        .peisong {
+            background-image: url('../image/img_icon/14.png');
+        }
+
+        .yanchu {
+            background-image: url('../image/img_icon/15.png');
+        }
+
+        .kefu {
+            background-image: url('../image/img_icon/17.png');
+        }
+
+        /* 筛选部分样式 */
+
+        .search_box {
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 1px rgba(255, 255, 255, .5);
+        }
+
+        .search_item>input[type="text"] {
+            width: 40%;
+            display: inline-block;
+            color: #666;
+            font-size: 16px;
+            margin-left: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 菜单部分 -->
+    <div class="menu_box flex-h flex-sa">
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_1">
+            <i class="menu_item_icon canting"></i>
+            <p>餐厅营销</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_2">
+            <i class="menu_item_icon daogou"></i>
+            <p>商场导购</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_3">
+            <i class="menu_item_icon jiajiao"></i>
+            <p>家教培训</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_4">
+            <i class="menu_item_icon wenyuan"></i>
+            <p>助理文员</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_5">
+            <i class="menu_item_icon tuiguang"></i>
+            <p>市场推广</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_6">
+            <i class="menu_item_icon peisong"></i>
+            <p>物流配送</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_7">
+            <i class="menu_item_icon yanchu"></i>
+            <p>商业演出</p>
+        </div>
+        <div class="menu_item flex-1" tapmode data-zpmap="all_menu_8">
+            <i class="menu_item_icon kefu"></i>
+            <p>客服人员</p>
+        </div>
+    </div>
+    <!-- 筛选部分 -->
+    <div class="search_box flex-sa">
+        <div class="search_item">
+            <input type="text" value="全部兼职" id="fenlei" data-value="1-1"><i class="fa fa-caret-down "></i>
+        </div>
+        <div class="search_item">
+            <input type="text" value="默认排序" id="paixu" data-value="2-1"><i class="fa fa-caret-down "></i>
+        </div>
+        <div class="search_item">
+        </div>
+    </div>
+
+    <!-- 模板部分 -->
+    <div class="Mg_tempList">
+
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul> 
+        {{~it:value:index}}
+        <li class="Mg_temp_item" tapmode data-id="{{= value.id}}">
+            <div class="title">{{= value.zptitle}}&nbsp;&nbsp;
+                {{? (value.zplikesta == 1) }}
+                <span class="fa fa-thumbs-up"></span>
+                {{?}}
+                {{? (value.zpfiresta == 1) }}
+                <span class="fa fa-fire"></span>
+                {{?}}
+            </div>
+            <div class="text clearfix">
+                <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>{{= value.zplocation}} </span>
+                <!-- 公司 -->
+                <span class="cop aui-pull-left">{{= value.coname}}</span>
+                <span class="pay aui-pull-right">{{= value.zppay}} </span>
+            </div>
+        </li>
+        {{~}}
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+
+
+<script>
+    var current_page = 1;
+
+    $().select();
+    apiready = function () {
+        api.parseTapmode();
+        selectCe();
+        MgGetMore();
+        // 给标题页模板招聘信息注册点击事件
+        clickToDelZp();
+        // 每个页面进入都存入本地名称方便login页面进行判断
+        putInFm();
+
+        seriesToTemp('all_zs');
+        clickMenuItem();
+    }
+
+    function selectCe() {
+        // 初始化选择插件
+        $("#fenlei").select({
+            title: "分类筛选",
+            items: [{
+                title: "全部兼职",
+                value: '1-1'
+            }, {
+                title: "周末兼职",
+                value: '1-2'
+            }, {
+                title: "附近兼职",
+                value: '1-3'
+            }],
+            onChange: flonChange,
+            onClose: function () {
+                console.log("close");
+            },
+            onOpen: function () {
+                console.log("open");
+            },
+        });
+        $("#paixu").select({
+            title: "排序筛选",
+            items: [{
+                    title: "最新发布",
+                    value: "2-1",
+                },
+                {
+                    title: "关注最多",
+                    value: "2-2",
+                },
+                {
+                    title: "酬金最高",
+                    value: "2-3",
+                }
+            ],
+            onChange: pxonChange,
+            onClose: function () {
+                console.log("close");
+            },
+            onOpen: function () {
+                console.log("open");
+            },
+
+        });
+        // 配合input强行选择器
+
+    }
+
+    // 注册menu——item点击事件
+    function clickMenuItem() {
+        $('.menu_item').on('click', function () {
+            var zpMap = $(this).data('zpmap');
+            console.log(JSON.stringify(zpMap));
+
+            seriesToTemp(zpMap);
+        })
+    }
+
+    function flonChange(d) {
+        console.log(JSON.stringify(d));
+        var zpMap = d.values;
+        console.log(JSON.stringify(zpMap));
+
+        seriesToTemp(zpMap);
+    }
+
+    function pxonChange(d) {
+        console.log(JSON.stringify(d));
+        var zpMap = d.values;
+        console.log(JSON.stringify(zpMap));
+
+        seriesToTemp(zpMap);
+
+    }
+</script>
+
+</html>

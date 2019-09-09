@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <link rel="stylesheet" href="../css/common.css">
+      <link rel="stylesheet" href="../css/font-awesome.min.css">
+      <style>
+        body{
+          padding: .5rem;
+          background-color: #fff;
+        }
+        .gotoMg {
+          height: 50px;
+        }
+
+        /* 右上角部分样式 */ 
+        .look  {
+          display: none;
+          float: right;
+          color: #333;
+          font-size: 16px;
+          padding: 20px 0;
+        }
+        .closef {
+          display: none;
+          float: right;
+          font-size: 20px;
+          color: #000;
+          padding: 10px;
+        }
+
+        /* 欢迎部分样式 */ 
+        .welcome {
+          height: 100px;
+          line-height: 40px;
+        }
+        .welcome .title {
+          font-weight: 700;
+          font-size: 20px;
+
+        }
+        .welcome .tips {
+          font-size: 16px;
+          color: #ccc;
+
+        }
+        .login_con {
+          line-height: 40px;
+        }
+        .login_con li  {
+          position: relative;
+          height: 100px;
+        }
+        li.pwd_cnt {
+          height: 50px;
+          line-height: 50px;
+        }
+        .login_con .lostPwd {
+          padding: 10px;
+          float: left;
+          color: #ccc;
+          font-size: 14px;
+        }
+        .login_con .sign {
+          float: right;        
+        }
+        .Mg_login_btn {
+          height: 50px;
+          line-height: 50px;
+
+        }
+        .Mg_login_btn {
+          position: absolute;
+          width: 80%;
+          height: 50px;
+          background-color: #f8d840;
+          border-radius: 25px;
+          box-shadow:  0 0 15px rgba(0, 0, 0, .1);
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%,-50%);
+          text-align: center;
+          color: #fff;
+        }
+        textarea {
+          width: 100%;
+          height: 80px;
+          padding-left: 20px;
+        }
+        .fa.fa-times-circle {
+          float: right;
+          padding: 0 10px;
+        }
+    </style>
+  </head>
+  <body>
+
+    <!-- 欢迎 标题  -->  
+    <div class="welcome">
+      <div class="title">
+        hello,欢迎补全信息
+        <i class="fa fa-times-circle" tapmode onclick="api.closeWin();"></i>
+      </div>
+      <div class="tips">
+        让别人了解你更多哟~
+      </div>
+    </div>
+
+    <!-- 登录部分  -->
+    <ul class="login_con">
+      <li>
+        <label for="mg_name">
+          姓名
+        </label>
+        <br />
+         &nbsp;&nbsp;&nbsp;
+        <input type="text" placeholder="请输入姓名" id="mg_name">
+      </li>
+      <li>
+        <label for="upage">
+          年龄
+        </label> 
+        <br />
+        &nbsp;&nbsp;&nbsp;
+        <input type="number" placeholder="请输入年龄" id="upage">
+
+      </li>
+      <li>
+        <label for="uaddress">
+          地址
+        </label> 
+        <br />
+        &nbsp;&nbsp;&nbsp;
+        <input type="text" placeholder="请输入地址" id="uaddress">
+
+      </li>
+      <li>
+        <label for="uemail">
+          邮箱
+        </label> 
+        <br />
+        &nbsp;&nbsp;&nbsp;
+        <input type="email" placeholder="请输入邮箱" id="uemail">
+
+      </li>
+      <li>
+        <label for="uqianming">
+          个性签名
+        </label> 
+        &nbsp;&nbsp;&nbsp;
+        <textarea  placeholder="请输入您的个性签名" id="uqianming">
+        </textarea>
+
+      </li>
+
+      <li class="Mg_login" tapmode onclick="fullUinfo();">
+        <div class="Mg_login_btn">
+          确认
+        </div>
+      </li>
+    </ul>
+
+  </body>
+  <script type="text/javascript" src="../script/depences/api.js"></script>
+  <script src="../script/depences/jquery.min.js"></script>
+  <script src="../script/common.js"></script>
+  <script>
+    var uInfo;
+    var id;
+      apiready = function(){
+          api.parseTapmode();
+          $api.fixStatusBar($api.dom('.welcome'));
+
+           uInfo = $api.getStorage('Mg_uInfo');
+          console.log(JSON.stringify(uInfo));
+          id = uInfo.id;
+          $('#mg_name').val(uInfo.mg_name);
+          $('#upage').val(uInfo.upage);
+          $('#uaddress').val(uInfo.uaddress);
+          $('#uqianming').val(uInfo.uqianming);
+          $('#uemail').val(uInfo.uemail);
+      }
+
+    function fullUinfo() {
+      sendUinfo();
+    }
+    //2、 验证完毕 发送ajax请求，添加数据
+    function sendUinfo() {
+            // 点击确认按钮获取所有信息，并验证
+        
+            var mg_name = $('#mg_name').val().trim();
+        console.log(JSON.stringify(mg_name));
+        
+        var upage = $('#upage').val().trim();
+        console.log(JSON.stringify(upage));
+        
+        var uaddress = $('#uaddress').val().trim();
+        var uemail = $('#uemail').val().trim();
+        var uqianming = $('#uqianming').val().trim();
+        var rex = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+        if(uemail) {
+          if(!rex.test(uemail)) {
+            return api.toast({
+              msg: '您输入的邮箱格式不正确',
+              duration: 2000,
+              location: 'bottom'
+            });
+          }
+        }
+       // 补全信息不用表单验证
+       var body =  {
+         id,
+         tbname:'u_tb',
+        mg_name,
+        upage,
+        uaddress,
+        uemail,
+        uqianming,
+       }
+      api.showProgress({
+        title: ' 正在补全信息',
+        text: '  请稍后',
+        modal:  true
+      });
+      console.log(JSON.stringify(body.mg_name)+'---'+JSON.stringify(body.upage))+'---'+JSON.stringify(body.uaddress);
+      
+      api.ajax({
+        url: baseUrl + 'ks/updateUtb.ksrun',
+        method: 'post',
+        timeout: 30,
+        dataType: 'json',
+        returnAll:false,
+        data:{
+          body
+        }
+      },function(ret,err){
+        api.hideProgress();
+        if (ret) {
+          
+          console.log(JSON.stringify(ret));
+          if(ret.status ==1 ) {
+            api.toast({
+              msg: '恭喜，信息修改成功',
+              duration: 2000,
+              location: 'bottom'
+            });
+            // 添加到本地中
+            uInfo = { ...uInfo,...body }
+            console.log(JSON.stringify(uInfo));
+            $api.setStorage('Mg_uInfo', uInfo);
+            // 跳转 
+            api.closeToWin({
+              name: 'root',
+              animation: {
+                type: 'flip',
+                subType: 'from_bottom',
+                duration: 500
+              }
+            });
+          }
+        } else {
+          api.alert({
+            msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+          });
+        };
+      }); 
+    }
+
+    // 已经填写果的信息，添加到表单中
+    function  uptoInput(prop) {
+      console.log(JSON.stringify(prop));
+      
+      if(uInfo.prop) {
+        $('#'+prop).val(uInfo.prop);
+      }
+    }
+    </script>
+  
+  </html>

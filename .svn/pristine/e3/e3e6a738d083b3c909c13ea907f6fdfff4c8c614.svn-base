@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        .msg_box {
+            box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .msg_box_item {
+            text-align: center;
+            -webkit-flex: 1;
+            flex: 1;
+            width: 30%;
+            height: 5rem;
+        }
+
+        .msg_box_item i {
+            padding-top: .6rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: inline-block;
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: .6rem;
+            box-shadow: 0 0 .75rem #fff;
+        }
+
+        .msg_box_item:nth-of-type(1) i {
+            /*  使用nth要注意的就是一定要拿到多i*/
+            background-image: linear-gradient(to right, #8590fb, #4cc2d7);
+        }
+
+        .msg_box_item:nth-of-type(2) i {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+        }
+
+        .msg_box_item:nth-of-type(3) i {
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+        }
+
+        /* 没有消息提醒样式 */
+
+        .noMsgTip {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            color: #ccc;
+            text-align: center;
+            background-image: url('../image/noMsgTip.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .noMsgTip .text {
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+        }
+
+        .noMsgTip .goHome {
+            position: absolute;
+            left: 50%;
+            top: 70%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 25px;
+            color: #000;
+            background-color: #f8d840;
+            box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+        }
+        .Mg_tempList p  {
+            margin-bottom: 20px;
+            color: #000;
+        }
+        .Mg_tempList li {
+            color:#fff;
+            text-indent: 2rem;
+            background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);  
+            margin-bottom: 20px;
+            border-radius: 5px;
+
+              }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="top">
+            <i class="fa fa-chevron-left" tapmode onclick="api.closeWin();"></i>
+            <div class="title">
+                工作邀约
+            </div>
+        </div>
+    </div>
+    <div class="noMsgTip" tapmmode onclick="goHome();">
+        <div class="text">
+            您还没有工作邀约，快去投递把~
+        </div>
+        <div class="goHome">
+            去投递
+        </div>
+    </div>
+    <div class="Mg_tempList">
+
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul>
+        {{~ it:value:index}}
+           <li> {{= value.coname}} {{= value.corecordsta}} 了您，请尽快联系，联系方式：{{= value.colink}} </li>
+       {{~}}
+
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+
+<script>
+    var id =  ($api.getStorage('Mg_uInfo') || {})['id'];
+    var headerH;
+    $('.noMsgTip').hide();
+    apiready = function () {
+        api.parseTapmode();
+        headerH = $api.fixStatusBar($api.dom('.header'));
+        $('.noMsgTip').css({
+            "top": headerH
+        });
+        console.log(JSON.stringify(id));
+        
+        getDataTotemp();
+    }
+    // 获取传递过来的数据，目前设置为空
+
+    function getDataTotemp() {
+                    
+        if(!id) return  $('.noMsgTip').show();;
+        api.ajax({
+            url: baseUrl + 'ks/getCorecord.ksrun',
+            method: 'post',
+            timeout: 30,
+            dataType: 'json',
+            returnAll: false,
+            data: {
+                body: {
+                    ks_data: {
+                        uId: id
+                    }
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                // TODO 
+                console.log(JSON.stringify(ret));
+                if(ret.ks_data && ret.ks_data.records && ret.ks_data.records.length != 0) {
+                    Mg_temp(ret.ks_data.records);
+                } else {
+                    $('.noMsgTip').show();
+                }
+
+            } else {
+                api.alert({
+                    msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+                });
+            };
+        });
+    }
+
+    function goHome() {
+
+        // 关闭窗口的过程不能够进行操作的
+        api.sendEvent({
+            name: 'backToRoot',
+            extra: {
+                key: ' value'
+            }
+        });
+    }
+</script>
+
+</html>

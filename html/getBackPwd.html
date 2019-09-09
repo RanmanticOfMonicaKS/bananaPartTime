@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <style>
+        body {
+            padding: .5rem;
+            background-color: #fff;
+        }
+
+        .gotoMg {
+            height: 50px;
+        }
+
+        /* 右上角部分样式 */
+        .look {
+            display: none;
+            float: right;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .closef {
+            display: none;
+            float: right;
+            font-size: 20px;
+            color: #000;
+            padding: 10px;
+        }
+
+        /* 欢迎部分样式 */
+
+        .welcome {
+            height: 100px;
+            line-height: 40px;
+        }
+
+        .welcome .title {
+            font-weight: 700;
+            font-size: 20px;
+
+        }
+
+        .welcome .tips {
+            font-size: 16px;
+            color: #ccc;
+
+        }
+
+
+        .login_con {
+            line-height: 40px;
+        }
+
+        .login_con label {
+            font-weight: 700;
+        }
+
+        .login_con li {
+            position: relative;
+            height: 100px;
+        }
+
+        .login_con .Mg_password {
+            float: left;
+        }
+
+        .login_con .Mg_yzm {
+            width: 80px;
+            height: 40px;
+            float: right;
+            border-radius: 10px;
+            line-height: 40px;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+            background-color: #f6d365;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+        }
+
+        li.pwd_cnt {
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .login_con .lostPwd {
+            float: left;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .login_con .sign {
+            float: right;
+        }
+
+        .Mg_getPwd {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            background-color: #f8d840;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            font-size: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <div class="top">
+            <i class="fa fa-chevron-left " tapmode onclick="api.closeWin();"></i>
+            <div class="title">
+            </div>
+        </div>
+    </div>
+
+    <div class="gotoMg">
+        <div class="look " onclick="gotoMg();" tapmode>先瞅瞅</div>
+        <div class="closef fa fa-times-circle " onclick="gotoMg();" tapmode></div>
+    </div>
+
+    <!-- 欢迎 标题  -->
+    <div class="welcome">
+        <div class="title">
+            您好，请输入手机获取验证码进行验证
+        </div>
+        <div class="tips">
+            验证成功即可重新设置密码~
+        </div>
+    </div>
+
+    <!-- 登录部分  -->
+    <ul class="login_con">
+        <li>
+            <label for="Mg_phone">
+                手机号
+            </label>
+            <br />
+            +86 &nbsp;&nbsp;&nbsp;
+            <input type="number" placeholder="请输入手机号" id="Mg_phone">
+        </li>
+        <li>
+            <label for="Mg_yzm">
+                验证码
+            </label>
+            <br />
+            <input type="number" placeholder="请输入验证码" id="Mg_yzm">
+            <div class="Mg_yzm" tapmode>验证码</div>
+        </li>
+
+        <li>
+            <div class="Mg_getPwd" tapmode onclick="checkYzm();">
+                确认
+            </div>
+        </li>
+    </ul>
+
+</body>
+<script type="text/javascript" src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script type="text/javascript">
+    var time1;
+    var rightYzm;
+    var flag = true;
+    var id; // 如果用户存在，记录其id
+    var user_phone;
+    apiready = function () {
+        api.parseTapmode();
+        $api.fixStatusBar($api.dom('.header'));
+        yzmCount();
+    }
+    // 修复 ，读秒器显示问题
+    function yzmCount() {
+    // 点击获取验证码操作
+    $('.Mg_yzm').on('click', function () {
+      user_phone = $('#Mg_phone').val().trim();
+
+      if (!user_phone || !(/^1[34578]\d{9}$/.test(user_phone))) {
+        return api.toast({
+          msg: '请输入正确的手机号码',
+          duration: 2000,
+          location: 'bottom'
+        });
+      }
+      if ($('.Mg_yzm').hasClass('disabled')) return;
+      $('.Mg_yzm').attr('disabled', true);
+      $('.Mg_yzm').css({
+        background: '#d8d8d8',
+        color: '#707070',
+      }).text('稍等60s');
+      let count = 59;
+      const countDown = setInterval(() => {
+        if (count === 0) {
+          $('.Mg_yzm').text('重新发送').removeAttr('disabled');
+          $('.Mg_yzm').css({
+            background: '#f8d840',
+            color: '#fff',
+          });
+          clearInterval(countDown);
+        } else {
+
+          $('.Mg_yzm').text('稍等' + count + 's');
+        }
+        count--;
+      }, 1000);
+    })
+  }
+
+
+    // 点击获取验证码操作
+    function checkYzm() {
+        console.log('验证');
+
+        // 现在时间
+        var time2 = +new Date();
+        var inputYzm = $('#Mg_yzm').val();
+        console.log(JSON.stringify(time2) + '----' + JSON.stringify(inputYzm));
+
+        if (rightYzm == inputYzm && time2 < time1) {
+            api.toast({
+                msg: '验证成功',
+                duration: 2000,
+                location: 'bottom'
+            });
+            setTimeout(() => {
+                api.openWin({
+                    name: 'initPwd',
+                    url: 'initPwd.html',
+                    bounces: false,
+                    pageParam: {
+                        user_phone,
+                        id
+                    }
+
+                }, 100);
+            })
+        } else {
+            alert('验证码不正确或已过期');
+        }
+
+    }
+
+    $('.Mg_yzm').on('click', function () {
+        // 手机号验证
+        user_phone = $('#Mg_phone').val().trim();
+
+        if (!user_phone || !(/^1[34578]\d{9}$/.test(user_phone))) {
+            return api.toast({
+                msg: '请输入正确的手机号码',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+        let count = 59;
+                        const countDown = setInterval(() => {
+                            if (count === 0) {
+                                $('.Mg_yzm').text('重新发送').removeAttr('disabled');
+                                $('.Mg_yzm').css({
+                                    background: '#f8d840',
+                                    color: '#fff',
+                                });
+                                clearInterval(countDown);
+                            } else {
+                                $('.Mg_yzm').attr('disabled', true);
+                                $('.Mg_yzm').css({
+                                    background: '#d8d8d8',
+                                    color: '#707070',
+                                });
+                                $('.Mg_yzm').text('稍等' + count + 's');
+                            }
+                            count--;
+                        }, 1000);
+     // 验证手机号是否注册。
+        api.ajax({
+            url: baseUrl + 'ks/ks/getUInfo.ksrun',
+            method: 'post',
+            timeout: 30,
+            dataType: 'json',
+            returnAll: false,
+            data: {
+                body: {
+                    ks_data: {
+                        uName: user_phone
+                    }
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                // TODO 
+                console.log(JSON.stringify(ret));
+
+                if (ret.ks_data && ret.ks_data.count > 0) {
+                    console.log('真----真');
+                    //作用域问题把，这边返回的true，并不是函数的返回值
+                    id = ret.ks_data.records[0].id;
+
+                    // 记录验证码信息
+                    if (flag) {                    
+                        console.log(JSON.stringify(user_phone));
+                        api.ajax({
+                            url:  baseUrl+ 'ks/ks/sendMessage.ksrun',
+                            method: 'post',
+                            timeout: 15,
+                            dataType: 'json',
+                            returnAll: false,
+                            data: {
+                                body: {
+                                    ks_data: {
+                                        user_phone: user_phone
+                                    }
+                                }
+                            }
+                        }, function (ret, err) {
+                            if (ret) {
+                                console.log(JSON.stringify(ret));
+                                if (ret.code && ret.expiredate) {
+                                    time1 = ret.expiredate;
+                                    rightYzm = ret.code;
+                                    console.log(JSON.stringify(rightYzm) + '----' + JSON
+                                        .stringify(time1));
+
+                                }
+                            } else {
+                                api.alert({
+                                    msg: ('错误码：' + err.code + '；错误信息：' + err.msg +
+                                        '网络状态码：' + err
+                                        .statusCode)
+                                });
+                            };
+                        });
+                        flag = false;
+                        setTimeout(() => {
+                            flag = true;
+                        }, 60000)
+                    }
+                    
+                } else {
+                    console.log('假----假');
+                    return api.toast({
+                        msg: '您的手机号还没有注册，请您校对后重试',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                api.alert({
+                    msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+                });
+            };
+        });
+
+
+    })
+ 
+    // 记录验证码
+
+</script>
+
+</html>

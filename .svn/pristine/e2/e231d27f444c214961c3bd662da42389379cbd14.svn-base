@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+    <title>Document</title>
+
+    <style>
+        p {
+            color:#000;
+
+            text-indent: 2em;
+            font-size: 18px;
+            padding: 5px;
+        }
+       html, body {
+            padding: 5px;
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);  
+            color:#000;
+              }
+        
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="top">
+            <i class=" fa fa-chevron-left" onclick="api.closeWin();"></i>
+            <div class="title">
+                关于我们
+            </div>
+        </div>
+    </div>
+    <div class="callus">
+        <p>
+            香蕉科技，致力于为企业提供全方位的互联服务网解决方案与信息技术咨询，助力企业拓展互联网服务能力。从企业信息技术战略规划到互联网应用开发与企业云计算服务建设的全方位解决方案。
+
+            我们提供：安全、完整的系统策划和设计公司在产品研发方面的高投入和众多项目的实践应用，让我们具备了相应的的创造力和丰富的经验，这将成为您解决疑问和难题的良好保证。可为您提供多方面完善的策划，如项目的规划立项、总体方案设计、方案评估论证；先进、专业的技术支持公司众多一流人才的深层磨合，对新技术执拗的探讨精神，使我们能够保证为你提供专业的应用，专业的服务；完善、快速的售后服务
+            以很快的速度、很有效的方法、先进的技术保障系统的效果发挥到极至，解除您的后顾之忧。
+
+            四维时空科技聚集了众多系统设计、系统开发和独特创意的才人，致力于提供软件开发服务、网络营销解决方案。涉及政务、教育、媒体、电商、零售、制造和金融等众多行业，并树立了良好的口碑，积累了丰富的经验和成功案例。
+        </p>
+
+    </div>
+</body>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+<script>
+    apiready = function () {
+        api.parseTapmode();
+        $api.fixStatusBar($api.dom('.header'));
+    }
+</script>
+
+</html>

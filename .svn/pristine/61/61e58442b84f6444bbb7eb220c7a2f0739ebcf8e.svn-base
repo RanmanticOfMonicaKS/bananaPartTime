@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+
+    <title>Document</title>
+    <style>
+        .Mg_tempList .Mg_temp_item {
+            height: 100px;  
+        }
+    </style>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="Mg_tempList">
+
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul> 
+        {{~it:value:index}}
+        <li class="Mg_temp_item" tapmode data-id="{{= value.id}}">
+            <div class="title">{{= value.zptitle}}&nbsp;&nbsp;
+                {{? value.zplikesta == 1 }}
+                <span class="fa fa-thumbs-up"></span>
+                {{?}}
+                {{? value.zpfiresta == 1 }}
+                <span class="fa fa-fire"></span>
+                {{?}}
+            </div>
+            <div class="text clearfix">
+                <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>{{= value.zplocation}} </span>
+                <!-- 公司 -->
+                <span class="cop aui-pull-left">{{= value.coname}}</span>
+                <span class="pay aui-pull-right">{{= value.zppay}} </span>
+            </div>
+        </li>
+        {{~}}
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+
+<script>
+      var current_page = 1;
+
+    apiready = function () {
+        api.parseTapmode();
+        // alert('进入cate_fm')
+        console.log(JSON.stringify(api.pageParam));
+        var zpMap = api.pageParam.zpMap;
+        seriesToTemp(zpMap);
+        clickToDelZp();
+    }
+
+</script>
+
+
+</html>

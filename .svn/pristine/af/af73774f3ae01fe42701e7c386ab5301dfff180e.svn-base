@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>香蕉兼职</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+
+</body>
+<script type="text/javascript" src="./script/depences/api.js"></script>
+<script src="./script/depences/jquery.min.js"></script>
+<script src="./script/common.js"></script>
+<script type="text/javascript">
+    // 判断是否登录，如果登录，跳转到main页面，如果没有登录，展示登录页面
+    var Mg_uInfo = $api.getStorage('Mg_uInfo') || {};
+    console.log(JSON.stringify(Mg_uInfo));
+    
+    apiready = function () {
+        console.log(JSON.stringify(api.frameName));
+
+        // 每次进入页面将页面名称存入本地
+        putInFm();
+        api.addEventListener({
+            name: 'geton'
+        }, function(ret, err){
+            var Mg_uInfo = $api.getStorage('Mg_uInfo') || {};
+            
+            if (Mg_uInfo.uname) {
+                getInMg();
+            } else {
+                getOutMeg();
+                getIn();
+            }
+        });
+
+        // 监听断网
+        api.addEventListener({
+            name: 'offline'
+        }, function(ret, err){
+            api.toast({
+                msg: api.appName+': 网络出错，请检查网络',
+                duration: 2000,
+                location: 'bottom'
+            });
+            //  注册点击，提示网络不可用 
+            document.documentElement.addEventListener('click',function(){
+                api.toast({
+                    msg: '网络不可用',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            },true)
+        });
+
+        // 监听连网
+        api.addEventListener({
+            name: 'online'
+        }, function(ret, err){
+            api.toast({
+                msg: api.appName+': 网络已连接',
+                duration: 2000,
+                location: 'bottom'
+            });
+            document.documentElement.removeEventListener('click',function(){
+                console.log('移除点击');
+                // 捕获阶段
+            },true)
+        });
+        
+        // 进入app判断网络类型
+        var connectionType = api.connectionType
+        if(connectionType == 'none') {
+            api.toast({
+                msg: api.appName+': 无网络，请检查网络状态',
+                duration: 2000,
+                location: 'bottom'
+            });
+            api.openWin({
+                name: 'Mg_offline',
+                url: './html/Mg_offline.html',
+                bounces: false,
+              
+            });
+        } else {
+            api.toast({
+                msg: '欢迎回来~~',
+                duration: 2000,
+                location: 'bottom'
+            });
+            if (Mg_uInfo.uname) {
+                getInMg();
+            } else {
+                getOutMeg();
+                getIn();
+            }
+        }
+    }
+
+    //跳转到登录页面的方法
+
+    function getIn() {
+        api.openFrame({
+            name: 'get_in',
+            url: './html/get_in.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: api.frameName
+            },
+            bounces: false,
+            bgColor: 'rgba(255,255,255,1)',
+            vScrollBarEnabled: true,
+            hScrollBarEnabled: true
+        });
+    }
+
+    // 定义跳转到主页的方法 一下mg都为香蕉
+    function getInMg() {
+        // 1、打开页面
+        api.toast({
+            msg: '欢迎回来~~',
+            duration: 2000,
+            location: 'bottom'
+        });
+        api.openFrame({
+            name: 'Mg_main',
+            url: './html/Mg_main.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'test'
+            },
+            bounces: true,
+            reload: true,
+            vScrollBarEnabled: true,
+            hScrollBarEnabled: true
+        });
+        // 2、监听热修
+        api.addEventListener({
+            name: 'smartupdatefinish'
+        }, function (ret, err) {
+            api.rebootApp();
+        });
+    }
+    // 3、手动添加退出应用提示
+    var flag = false;
+
+    function getOutMeg() {
+        api.addEventListener({
+            name: 'keyback'
+        }, function (ret, err) {
+            if (!flag) {
+                api.toast({
+                    msg: api.appName + ': 再按一次返回键退出',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+            setTimeout(function () {
+                flag = false;
+            }, 2500);
+            if (flag) {
+                flag = false;
+                api.closeWidget({
+                    silent: true
+                });
+            }
+            flag = true;
+        });
+    }
+    
+
+ 
+</script>
+
+</html>

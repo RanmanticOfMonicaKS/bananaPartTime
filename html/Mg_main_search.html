@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/swiper.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        main {
+            padding: 10px;
+        }
+
+        .categorey {
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        .categorey div {
+            text-align: center;
+        }
+
+        .categorey h2 {
+            font-weight: 700;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .categorey div {
+            position: relative;
+            background-color: #fff;
+            width: 30%;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, .2);
+            height: 100%;
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .categorey div i {
+            font-size: 40px;
+        }
+
+        .categorey div:nth-of-type(1) i {
+            color: #f8d840;
+        }
+
+        .categorey div:nth-of-type(2) i {
+            color: lightskyblue;
+        }
+
+        .categorey div:nth-of-type(3) i {
+            color: lightgreen;
+        }
+
+        .item-1 {
+            background: url('../image/home_hp_bg1.png');
+        }
+
+        .item-2 {
+            background: url('../image/home_hp_bg2.png');
+        }
+
+        .item-3 {
+            background: url('../image/home_hp_bg2.png');
+        }
+
+        .swiper-slide {
+            border-radius: 10px;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 大的分类 -->
+    <div class="categorey flex-sb flex-h">
+        <div class="flex-1 flex-v categorey_item" data-zpmap="search_cate_1" tapmode>
+            <i class="fa fa-users"></i>
+            <h2>高薪直聘</h2>
+        </div>
+        <div class="flex-1 flex-v categorey_item" data-zpmap="search_cate_2" tapmode>
+            <i class=" fa fa-file-text-o"></i>
+            <h2>当日结算</h2>
+
+        </div>
+        <div class="flex-1 flex-v categorey_item" data-zpmap="search_cate_3" tapmode>
+            <i class=" fa fa-building"></i>
+            <h2>品牌专区</h2>
+        </div>
+    </div>
+        <!-- 轮播图 -->
+        <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide categorey_item" data-zpmap="search_swiper_1" tapmode><img src="../image/Mg_search_bg1.png" alt=""></div>
+            <div class="swiper-slide categorey_item" data-zpmap="search_swiper_2" tapmode><img src="../image/Mg_search_bg2.png" alt=""></div>
+            <div class="swiper-slide categorey_item" data-zpmap="search_swiper_3" tapmode><img src="../image/Mg_search_bg3.png" alt=""></div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Arrows -->
+    </div>
+    <!-- 展示兼职 -->
+    <div>
+        <span class="title-1">更多推荐</span>
+    </div>
+    <div class="Mg_tempList">
+        
+    </div>
+
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul> 
+        {{~it:value:index}}
+        <li class="Mg_temp_item" tapmode data-id="{{= value.id}}">
+            <div class="title">{{= value.zptitle}}&nbsp;&nbsp;
+                {{? (value.zplikesta == 1) }}
+                <span class="fa fa-thumbs-up"></span>
+                {{?}}
+                {{? (value.zpfiresta == 1) }}
+                <span class="fa fa-fire"></span>
+                {{?}}
+            </div>
+            <div class="text clearfix">
+                <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>{{= value.zplocation}} </span>
+                <!-- 公司 -->
+                <span class="cop aui-pull-left">{{= value.coname}}</span>
+                <span class="pay aui-pull-right">{{= value.zppay}} </span>
+            </div>
+        </li>
+        {{~}}
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/swiper.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script>
+      var current_page = 1;
+
+    apiready = function () {
+        api.parseTapmode();
+        // 监听改变
+        MgSwiper();
+        MgGetMore();
+        // 给标题页模板招聘信息注册点击事件
+        clickToDelZp();
+        // 每个页面进入都存入本地名称方便login页面进行判断
+        putInFm();
+        // frame界面相当给了一个所有页面公用页面都能操作品台  设置延时
+        seriesToTemp('search_zs');
+        // 注册点击跳转
+        clickCateItem();
+        
+    }
+    // 轮播图，展示
+    function MgSwiper() {
+        var swiper = new Swiper('.swiper-container', {
+            loop:true,
+            spaceBetween: 30,
+            centeredSlides: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            }
+        });
+
+    }
+
+    // 下拉刷新
+    function MgGetMore() {
+        api.setRefreshHeaderInfo({
+            visible: true,
+            loadingImg: 'widget://image/refresh.png',
+            bgColor: '#fff',
+            textColor: '#020202',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            showTime: true,
+        }, function (ret, err) {
+            console.log('下拉刷新操作');
+            setTimeout(() => {
+                api.refreshHeaderLoadDone();
+            }, 500)
+        });
+    }
+
+    // 给品牌区域已经 轮播区域添加点击事件
+    function clickCateItem() {
+        $('.categorey_item').on('click',function(){
+           var  zpMap =  $(this).data('zpmap');
+           console.log(JSON.stringify(zpMap));
+           
+            api.openWin({
+                name: 'Mg_zp_cate_win',
+                url: 'Mg_zp_cate_win.html',
+                bounces: false,
+                pageParam: {key : 'value'},
+                pageParam:{ zpMap }
+            });
+        })
+    }
+</script>
+
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        body {
+            padding: 0;
+
+        }
+
+        main {
+            position: relative;
+            height: 100%;
+        }
+
+        .box {
+            position: absolute;
+            left: 50%;
+            top: 8rem;
+            margin-left: -1.25rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            transform: rotateZ(0);
+            transition: transform 1s;
+            background: url('../image/menu_scroll.jpg');
+            background-size: cover;
+            z-index: 1;
+        }
+
+        .box.active {
+            transform: rotateZ(3600deg);
+
+            transition: transform 1s;
+        }
+
+        .yz_menu_item {
+            position: absolute;
+            width: 3rem;
+            height: 1.5rem;
+            line-height: 1.5rem;
+            text-align: center;
+            background-color: #fff;
+            border-radius: .4rem;
+            box-shadow: 0 0 .75rem rgba(0, 0, 0, .5);
+            font-size: .7rem;
+        }
+
+        .yz_menu_item.a:nth-of-type(1) {
+            left: 0rem;
+            top: 8rem;
+        }
+
+        .yz_menu_item.a:nth-of-type(2) {
+            left: 4.5rem;
+            top: 3rem;
+        }
+
+        .yz_menu_item.a:nth-of-type(3) {
+            left: 50%;
+            margin-left: -1.5rem;
+            top: 1rem;
+        }
+
+        .yz_menu_item.a:nth-of-type(4) {
+            right: 4.5rem;
+            top: 3rem;
+        }
+
+        .yz_menu_item.a:nth-of-type(5) {
+            right: 0rem;
+            top: 8rem;
+        }
+
+        .yz_menu_item.b {
+            left: 50%;
+            top: 9rem;
+            margin-left: -1.5rem;
+        }
+
+        .zj.sj,
+        .jp.sj {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translate(0, -50%);
+            border: .5rem solid transparent;
+            width: 0;
+            height: 0;
+            border-left: .5rem solid #fff;
+            box-sizing: content-box;
+        }
+
+        .sg.sj {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border: .5rem solid transparent;
+            width: 0;
+            height: 0;
+            border-top: .5rem solid #fff;
+            box-sizing: content-box;
+        }
+
+        .zp.sj,
+        .jd.sj {
+            position: absolute;
+            top: 50%;
+            margin-left: -100%;
+            transform: translate(0, -50%);
+            border: .5rem solid transparent;
+            width: 0;
+            height: 0;
+            border-right: .5rem solid #fff;
+            box-sizing: content-box;
+        }
+
+
+
+        /* 提示信息 */
+
+        .yz_menu_item_box {
+            position: relative;
+            width: 100%;
+            height: 12rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 提醒tip的样式 */
+        .tip {
+            position: absolute;
+            height: 50px;
+            border-radius: 3px;
+            background-color: pink;
+            left: 4rem;
+            font-size: 16px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+            text-align: center;
+            color: #fff;
+
+        }
+
+        .closeTip {
+            font-size: 12px;
+            color: aqua;
+        }
+
+        .Mg_wrap_hd {
+            width: 100%;
+            height: 400px;
+            background: url('../image/home_bg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin-top: 10px;
+        }
+
+        .Mg_tempList {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="Mg_wrap">
+
+        <div>
+            <span class="text-1">更多推荐</span>
+        </div>
+        <div class="tip" style="display: none;" tapmode>
+            <span>点击展开菜单</span><br>
+            <span class="closeTip" tapmode>知道了~</span>
+        </div>
+        <div class="Mg_wrap_hd">
+        </div>
+        <!-- <div class="yz_menu_item_box home_tj" style="visibility: hidden;">
+                        <div class="yz_menu_item a zj ">
+                            在家赚钱
+                        </div>
+                        <div class="yz_menu_item  a jp ">
+                            兼职急招
+                        </div>
+                        <div class="yz_menu_item  a sg ">
+                            优质上岗
+                        </div>
+                        <div class="yz_menu_item  a zp ">
+                            大牌直聘
+                        </div>
+                        <div class="yz_menu_item a jd ">
+                            轻松好做
+                        </div>
+                    </div> -->
+
+        <div class="box" onclick="rotateT();" tapmode style="display: none;"></div>
+
+        <div class="Mg_tempList">
+            <div>
+                <span class="title-1">精选发现</span>
+            </div>
+
+            <!-- <ul>
+                            <li class="Mg_temp_item">
+                                <div class="title">游戏账号操作，在家轻松兼职&nbsp;&nbsp;
+                                    <span class="fa fa-thumbs-up"></span>
+                                </div>
+                                <div class="text clearfix">
+                                    <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>全国 </span>
+                                    <span class="cop aui-pull-left">背景德者文化传播有限责任公司</span>
+                                    <span class="pay aui-pull-right"> 8000 元/月</span>
+                                </div>
+                            </li>
+                        </ul> -->
+        </div>
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul> 
+        {{~it:value:index}}
+        <li class="Mg_temp_item" tapmode data-id="{{= value.id}}">
+            <div class="title">{{= value.zptitle}}&nbsp;&nbsp;
+                {{? value.zplikesta == 1 }}
+                <span class="fa fa-thumbs-up"></span>
+                {{?}}
+                {{? value.zpfiresta == 1 }}
+                <span class="fa fa-fire"></span>
+                {{?}}
+            </div>
+            <div class="text clearfix">
+                <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>{{= value.zplocation}} </span>
+                <!-- 公司 -->
+                <span class="cop aui-pull-left">{{= value.coname}}</span>
+                <span class="pay aui-pull-right">{{= value.zppay}} </span>
+            </div>
+        </li>
+        {{~}}
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/Mg_main_home.js"></script>
+
+<script>
+    var current_page = 1;
+    var flag = false; // 计时器 用来改良这个坑爹的arcmenu模块
+    var b = 100; // arcmenu相对于展示页面的的纵距离
+    var arcMenu;
+    var id;
+    apiready = function () {
+        // 定义贴士 
+
+        api.parseTapmode();
+        $('.tip').css({
+            "top": .25 * api.winWidth + 160 + 30 + 'px'
+        }).show(500);
+        arcMenu = api.require('arcMenu');
+        MgGetMore();
+        console.log(JSON.stringify(api.frameName));
+        // 重新显示arcMenu
+        // lisShowArc();
+        // 每个页面进入都存入名称，方便login页面判断
+        putInFm();
+        // 给标题页模板招聘信息注册点击事件
+        clickToDelZp();
+        // 注意！ 一个特殊情况，在于从其他win调回到framgroup中，不刷新导致没有注册点击事件
+        api.addEventListener({
+            name: 'updateUser'
+        }, function (ret, err) {
+            console.log('1111111------重新注册点击事件');
+            clickToDelZp();
+        });
+        //g关闭提示
+        closeTip();
+        // 监听滚动，决定是否展示arc模块  滚动监听IOS有问题，回到之哦整个frameGroup被监听
+        ScollWhere();
+        // var Mg_tempData = $api.getStorage('home_zs');
+        // console.log(JSON.stringify(Mg_tempData));
+        // Mg_temp(Mg_tempData);
+        seriesToTemp('home_zs')
+        flag = true;
+        // 页面加载 获取数据，直接渲染模板避免请求 
+
+        // 监听回到root
+        api.addEventListener({
+            name: 'viewappear'
+        }, function (ret, err) {
+            var index = $api.getStorage('index');
+            console.log('回到Mg_main_home页面');
+
+            console.log(JSON.stringify(index));
+            if (index == 0) {
+                api.execScript({
+                    frameName: 'Mg_main',
+                    script: 'showArc();'
+                });
+            }
+        });
+        // 获取body 的高度
+        var bodyH = $api.offset($api.dom('body')).h;
+        console.log(JSON.stringify(bodyH));
+        var a = bodyH - api.frameHeight;
+        console.log(JSON.stringify(a));
+
+
+    }
+
+
+
+
+
+    // 关闭tips功能
+    function closeTip() {
+        $('.tip').on('click', function (e) {
+            e.stopPropagation();
+
+            $('.tip').hide(500);
+        })
+
+    }
+
+
+    // 监听滚动时间，隐藏木块
+    function ScollWhere() {
+        // var scrollTop = window.scrollTop;
+        // console.log(JSON.stringify(scrollTop));
+
+        $(document).scroll(function () {
+            var scrollTop = $(document).scrollTop();
+            console.log(JSON.stringify(scrollTop) + '--滚动距离');
+            var index = $api.getStorage('index');
+            console.log(JSON.stringify(index));
+
+            if (scrollTop <= 50 && index == 0) {
+                api.execScript({
+                    frameName: 'Mg_main',
+                    script: ' showArc();'
+                });
+            } else {
+                api.execScript({
+                    frameName: 'Mg_main',
+                    script: ' hideArc();'
+                });
+            }
+        })
+    }
+</script>
+
+</html>

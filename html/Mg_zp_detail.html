@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+
+    <title>Document</title>
+    <style>
+        body {
+            padding: 0 10px;
+        }
+
+        .top i {
+            padding-left: 0px;
+        }
+
+        /* 公司标题信息部分 */
+        .zp_info_hd {
+            padding-left: 20px;
+        }
+
+        .zp_info_hd .title {
+            height: 100px;
+            line-height: 40px;
+        }
+        /* 图标颜色 */
+
+        .fa.fa-qq {
+            color: pink;
+        }
+        .fa.fa-weixin {
+            color: #1CE31C;
+        }
+        
+        .zpTitle {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .subTitle {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .zpPay {
+            color: red;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* 公司部分样式 */
+        .coinfo {
+            height: 150px;
+            box-shadow: 0 3px 10px rgba(200, 200, 200, .1);
+            border-radius: 20px;
+        }
+
+        .coinfo .fa.fa-building-o {
+            padding-top: 5px;
+            width: 50px;
+            height: 50px;
+            font-size: 40px;
+            color: royalblue;
+            vertical-align: top;
+        }
+
+        .coName {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .coinfo_text {
+            display: inline-block;
+            font-size: 12px;
+        }
+
+        .coinfo_text i {
+            color: aquamarine;
+        }
+
+        .coScore {
+            font-size: 18px;
+            color: red;
+            font-weight: 700;
+        }
+
+        .coChecked {
+            color: aquamarine;
+        }
+
+        .coinfo_t {
+            margin-bottom: 20px;
+        }
+
+        .links {
+            width: 90%;
+            padding-left: 10px;
+            background-color: rgba(200, 200, 200, .1);
+            height: 40px;
+            line-height: 40px;
+            padding-right: 10px;
+            border-radius: 5px;
+            color: rgba(50, 50, 50);
+            font-size: 14px;
+        }
+
+        .coinfo {
+            position: relative;
+        }
+
+        .fa-phone {
+            font-size: 18px;
+        }
+
+        .coLink {
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .copy_btn {
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            background-color: #f8d840;
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(200, 200, 200, .1);
+            margin-top: 5px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(50, 50, 50);
+        }
+
+        .Mg_tempList {
+            padding: 0;
+            box-sizing: border-box;
+            padding-bottom: 50px;
+        }
+
+        /* 报名收藏部分 */
+        .bm_sc {
+            position: fixed;
+            bottom: 0;
+            width: 80%;
+            height: 50px;
+            left: 10%;
+            line-height: 50px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .sc {
+            float: left;
+            width: 30%;
+            height: 100%;
+            background-image: linear-gradient(to right, #8590fb, #4cc2d7);
+            border-radius: 25px 0 0 25px;
+        }
+
+        .bm {
+            float: right;
+            width: 70%;
+            height: 100%;
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+            border-radius: 0 25px 25px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <div class="top">
+            <i class="fa fa-chevron-left " tapmode onclick="api.closeFrame();"></i>
+            <div class="title">
+
+            </div>
+        </div>
+    </div>
+    <main>
+
+        <div class="Mg_tempList">
+
+        </div>
+    </main>
+    <div class="bm_sc">
+        <div class="sc" tapmode>收藏</div>
+        <div class="bm" tapmode>立即报名</div>
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <div class="zp_info_hd">
+        <div class="title">
+            <span class="zpTitle">{{= it.zptitle}} </span> <br />
+            <span class="subTitle">{{= it.zpduring}}·{{= it.zppaytype}}·{{= it.zpsex}}</span> &nbsp;&nbsp;<span class="zpPay">{{= it.zppay}} </span>
+        </div>
+        <div class="coinfo">
+            <div class="coinfo_t">
+                <i class="fa fa-building-o"></i>
+                <span class="coinfo_text">
+                    <span class="coName">{{= it.coname}} </span><br />
+                    {{? it.cochecked == 1}}
+                    <i class="fa fa-diamond"></i> <span class="coChecked">已认证</span>
+                    {{?}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    评分&nbsp;&nbsp;&nbsp; <span class="coScore">{{= it.coscore}} </span>
+                </span>
+
+            </div>
+            <div class="links">
+                联系公司&nbsp;&nbsp;&nbsp; 
+                {{? it.zsstatus ==1 }}
+                <i class="fa {{= it.adminlinktype}}">
+                </i>&nbsp; <span class="coLink">{{= it.adminlink}} </span>
+                    {{?? it.zsstatus ==0 }}
+                    <i class="fa {{= it.colinktype}}"></i>
+                </i>&nbsp; <span class="coLink">{{= it.colink}} </span>
+                {{?}}
+                <span class="copy_btn aui-pull-right" tapmode onclick="copyText();">复制</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="v-title">
+        <span class="text-1">职位描述</span>
+    </div>
+    <div class="zpWork">
+        {{= it.zpwork}}
+    </div>
+    <div class="v-title"><span class="text-1">工作时间</span></div>
+    <div class="zpWorkTime">
+        {{= it.zpworktime}}
+    </div>
+    <div class="v-title"><span class="text-1">工作地点</span></div>
+    <div class="zpWorkAdd">
+        {{= it.zpworkadd}}
+    </div>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+
+<script>
+    var clipBoard;
+    var zpId; // zp id
+    var bmsc;
+    var uInfo;
+    var uId;
+    var checkbool = {
+        bmbool: false,
+        scbool: false
+    }
+    apiready = function () {
+        api.parseTapmode();
+        var headerH = $api.fixStatusBar($api.dom('.header'));
+
+        uInfo = $api.getStorage('Mg_uInfo') || {};
+        console.log(JSON.stringify(uInfo));
+
+        uId = uInfo.id ? uInfo.id : null;
+
+        clipBoard = api.require('clipBoard');
+        console.log(JSON.stringify(api.pageParam));
+        zpId = api.pageParam.id;
+        chooseZpToTemp(zpId);
+        // 计算的main的高度，避免页面头部被订走
+        $('main').css({
+            "height": api.winHeight - headerH - 50
+        }); // 50空出距离
+        // 收藏和报名的点击事件
+        bmClick();
+        scClick();
+        // 获取数据比对
+        helpToCheck().then(r => {
+            console.log(JSON.stringify(r));
+            if (r.ks_data && r.ks_data.records) {
+                var retArr = r.ks_data.records;
+                retArr.forEach(item => {
+                    if (item.zpid == zpId && item.uid == uId) {
+                        console.log('已报名或收藏');
+
+                    }
+                });
+            }
+        }, e => {
+            api.alert({
+                msg: ('错误码：' + e.code + '；错误信息：' + e.msg + '网络状态码：' + e.statusCode)
+            });
+        })
+
+    }
+
+    function copyText() {
+        var value = $('.coLink').text();
+        clipBoard.set({
+            value
+        }, function (ret, err) {
+            if (ret) {
+                api.toast({
+                    msg: '复制成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                api.closeFrame({});
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+    // 判断是否登录的函数
+    function isLoginOrNot() {
+        console.log('进入登录判断');
+
+        console.log(JSON.stringify(uInfo));
+
+        if (!uInfo.uname) {
+            console.log('进入判断');
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function bmClick() {
+        var uZpstatus = '已报名'
+        $('.bm').on('click', function () {
+            console.log(JSON.stringify(zpId));
+            if (!isLoginOrNot()) {
+                api.confirm({
+                    title: '您还未登录',
+                    msg: '是否立即登录？',
+                    buttons: ['确定', '取消']
+                }, function (ret, err) {
+                    if (ret.buttonIndex == 1) {
+                        api.openFrame({
+                            name: 'get_in',
+                            url: 'get_in.html',
+                            bounces: false,
+                            rect: {
+                                x: 0,
+                                y: 0,
+                                w: 'auto',
+                                h: 'auto'
+                            }
+                        });
+                    } else if (ret.buttonIndex == 2) {
+                        return api.toast({
+                            msg: '好的~再看看',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                });
+            }
+            if (!uId) return;
+            api.showProgress({
+                title: ' 正在报名',
+                text: ' 请稍后',
+                modal: true
+            });
+            hasDoneOrNot(uZpstatus, uId, zpId).then(r => {
+                console.log(JSON.stringify(r));
+                // 如果已经报名了
+                if (r) {
+                    return api.toast({
+                        msg: '您' + uZpstatus + '了此条招聘',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
+                    api.ajax({
+                        url: baseUrl + 'ks/ks/addUzp.ksrun',
+                        method: 'post',
+                        timeout: 30,
+                        dataType: 'json',
+                        returnAll: false,
+                        data: {
+                            body: {
+                                tbname: 'uzp_tb',
+                                zpId: zpId,
+                                uId: uId,
+                                uZpstatus: uZpstatus
+
+                            }
+                        }
+                    }, function (ret, err) {
+                        console.log(JSON.stringify(ret));
+                        if (ret) {
+                            // TODO 
+                            if (ret.status && ret.status == 1) {
+                                api.toast({
+                                    msg: '报名成功，静候佳音吧~',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            } else {
+                                alert('网络出错~')
+                            }
+                        } else {
+                            api.alert({
+                                msg: ('错误码：' + err.code + '；错误信息：' + err.msg +
+                                    '网络状态码：' + err
+                                    .statusCode)
+                            });
+                        };
+                    });
+
+                    var whatTime = getTimeNow();
+                    // 添加到urecord表中，方便以后查询
+                    api.ajax({
+                        url: baseUrl + 'ks/ks/saveUrecord.ksrun',
+                        method: 'post',
+                        timeout: 30,
+                        dataType: 'json',
+                        returnAll:false,
+                        data:{
+                            body:{
+                                tbname:'urecord_tb',
+                                recordType:uZpstatus,
+                                uId,
+                                zpId,
+                                whatTime
+                            }
+                        }
+                    },function(ret,err){
+                        if (ret) {
+                            // TODO 
+                        } else {
+                            api.alert({
+                                msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+                            });
+                        };
+                    });
+                }
+
+            }).catch(e => {
+               api.toast({
+                   msg:uZpstatus.substr(1,2)+ '失败，网络开小差啦~',
+                   duration: 2000,
+                   location: 'bottom'
+               });
+            })
+        })
+    }
+
+    function scClick() {
+        var uZpstatus = '已收藏'
+        $('.sc').on('click', function () {
+            console.log(JSON.stringify(zpId));
+            if (!isLoginOrNot()) {
+                api.confirm({
+                    title: '您还未登录',
+                    msg: '是否立即登录？',
+                    buttons: ['确定', '取消']
+                }, function (ret, err) {
+                    if (ret.buttonIndex == 1) {
+                        api.openFrame({
+                            name: 'get_in',
+                            url: 'get_in.html',
+                            bounces: false,
+                            rect: {
+                                x: 0,
+                                y: 0,
+                                w: 'auto',
+                                h: 'auto'
+                            }
+                        });
+                    } else if (ret.buttonIndex == 2) {
+                        return api.toast({
+                            msg: '好的~再看看',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                });
+            }
+            if (!uId) return;
+            api.showProgress({
+                title: ' 正在收藏',
+                text: ' 请稍后',
+                modal: true
+            });
+            hasDoneOrNot(uZpstatus, uId, zpId).then(r => {
+                console.log(JSON.stringify(r));
+                // 如果已经报名了
+                if (r) {
+                    return api.toast({
+                        msg: '您' + uZpstatus + '了此条招聘',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
+                    api.ajax({
+                        url: baseUrl + 'ks/ks/addUzp.ksrun',
+                        method: 'post',
+                        timeout: 30,
+                        dataType: 'json',
+                        returnAll: false,
+                        data: {
+                            body: {
+                                tbname: 'uzp_tb',
+                                zpId: zpId,
+                                uId: uId,
+                                uZpstatus: uZpstatus
+
+                            }
+                        }
+                    }, function (ret, err) {
+                        console.log(JSON.stringify(ret));
+                        if (ret) {
+                            // TODO 
+                            if (ret.status && ret.status == 1) {
+                                api.toast({
+                                    msg: '收藏成功，可前往我的收藏查看~',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            } else {
+                                alert('网络出错~')
+                            }
+                        } else {
+                            api.alert({
+                                msg: ('错误码：' + err.code + '；错误信息：' + err.msg +
+                                    '网络状态码：' + err
+                                    .statusCode)
+                            });
+                        };
+                    });
+
+                    var whatTime = getTimeNow();
+                    // 添加到urecord表中，方便以后查询
+                    api.ajax({
+                        url: baseUrl + 'ks/ks/saveUrecord.ksrun',
+                        method: 'post',
+                        timeout: 30,
+                        dataType: 'json',
+                        returnAll:false,
+                        data:{
+                            body:{
+                                tbname:'urecord_tb',
+                                recordType:uZpstatus,
+                                uId,
+                                zpId,
+                                whatTime
+                            }
+                        }
+                    },function(ret,err){
+                        if (ret) {
+                            // TODO 
+                        } else {
+                            api.alert({
+                                msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+                            });
+                        };
+                    });
+                }
+
+            }).catch(e => {
+               api.toast({
+                   msg:uZpstatus.substr(1,2)+ '失败，网络开小差啦~',
+                   duration: 2000,
+                   location: 'bottom'
+               });
+            })
+        })
+    }
+
+
+    // 查询收藏，报名数据，以便后期判断
+    function helpToCheck() {
+        console.log(JSON.stringify(uId));
+
+        var promise = new Promise((resolve, rejecet) => {
+
+            api.ajax({
+                url: baseUrl + 'ks/ks/getUrecord.ksrun',
+                method: 'post',
+                timeout: 30,
+                dataType: 'json',
+                returnAll: false,
+                data: {
+                    body: {
+                        ks_data: {
+
+                        }
+                    }
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    // TODO 
+                    resolve(ret);
+                } else {
+                    rejecet(err)
+                };
+            });
+        })
+        return promise;
+    }
+
+  
+</script>
+
+</html>

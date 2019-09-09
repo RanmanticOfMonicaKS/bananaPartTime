@@ -1,0 +1,7 @@
+r1
+  +empty_dir: feature
+  +empty_dir: res
+  +empty_dir: wgt
+  +file_prop: icon/icon150x150.png svn:mime-type image/png
+  +file_prop: image/loading_more.gif svn:mime-type image/gif
+  +file_prop: launch/launch1080x1920.png svn:mime-type image/png

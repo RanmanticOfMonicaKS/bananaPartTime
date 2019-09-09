@@ -1,0 +1,5 @@
+; This file is used internally by git-svn
+; You should not have to edit it
+[svn-remote "svn"]
+	reposRoot = svn://svn4.apicloud.com/A6018405421723
+	uuid = 0e1a2743-8d03-4e5a-a60c-7e26af42b145

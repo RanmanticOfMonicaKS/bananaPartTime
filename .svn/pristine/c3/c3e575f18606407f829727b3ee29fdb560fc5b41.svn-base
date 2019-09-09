@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/api.css">
+    <style>
+        /*  图片位置  */
+        .offline {
+           position: absolute;
+           left: 0;
+           top: 50%;
+           transform: translate(0,-50%);
+            width: 100%;
+            text-align: center;
+        }
+        .offline img {
+            width: 50%;
+            height: auto;
+        }
+
+        .offline_btn {
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 50px;
+            background-color: #f8d840;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+        <div class="header">
+                <div class="top">
+                  <i class="fa fa-chevron-left " tapmode onclick="toback();"></i>
+                  <div class="title">
+            
+                  </div>
+                </div>
+              </div>
+    <div class="offline">
+        <img src="../image/offline.png" alt="">
+        <br />
+
+        <div class="offline_btn" onclick="reConnect();">
+            重试
+        </div>
+        
+    </div>
+</body>
+<script type="text/javascript" src="./script/depences/api.js"></script>
+<script src="./script/depences/jquery.min.js"></script>
+<script src="./script/common.js"></script>
+<script type="text/javascript">
+var flag1  =false;  // 按钮的判断，兼顾没有回退按钮的用户
+    apiready = function(){
+        api.toast({
+            msg: api.appName+': 网络错误，请检查网络连接并重试',
+            duration: 2000,
+            location: 'bottom'
+        });
+        reConnect();
+    }
+    // 点击重试，重新检测网络
+    function reConnect() {
+        var connectionType = api.connectionType
+        if(connectionType != 'none') {
+            api.sendEvent({
+                name: 'geton',
+                extra: {key:' value'}
+            });
+            api.closeWin({
+            });
+        } else {
+            api.toast({
+                msg: api.appName+': 网络错误，请检查网络连接并重试',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+    }
+
+    //同样的退出提示
+    var flag = false;
+
+function getOutMeg() {
+    api.addEventListener({
+        name: 'keyback'
+    }, function (ret, err) {
+        if (!flag) {
+            api.toast({
+                msg: api.appName + ': 再按一次返回键退出',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+        setTimeout(function () {
+            flag = false;
+        }, 2500);
+        if (flag) {
+            flag = false;
+            api.closeWidget({
+                silent: true
+            });
+        }
+        flag = true;
+    });
+}
+
+// 返回判断，如果初次进入，测提示退出，如果来此 断网之前的页面，回到之前的页面
+
+// 如果断网就强行到这个页面是不是太过霸道  这里只做退出操作，如果已经进入，后断网，只做提示
+function toback() {
+    api.toast({
+        msg: api.appName+': 3s内再次点击退出应用',
+        duration: 2000,
+        location: 'bottom'
+    });
+    flag1 = true;
+    setTimeout(() => {
+        flag1 = false;
+    },3000)
+    if(flag1) {
+        api.closeWidget({
+            silent: true
+        });
+    }
+}
+
+</script>
+</html>

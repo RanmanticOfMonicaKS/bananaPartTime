@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[svn-remote "svn"]
+	url = svn://svn4.apicloud.com/A6018405421723/%E9%A6%99%E8%95%89%E5%85%BC%E8%81%8C
+	fetch = :refs/remotes/git-svn

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        /* 登录部分 */
+        .login_box {
+            padding-top: 20px;
+            margin-bottom: 20px;
+            height: 200px;
+        }
+
+        .login_box .title {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .login_box .qianming {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .login_box div {
+            margin-bottom: 10px;
+        }
+
+        .login_box_l {
+            float: left;
+            height: 100%;
+            width: 65%;
+        }
+
+        .login_box_r {
+            float: right;
+            height: 100%;
+            width: 35%;
+        }
+
+        .login_box_r_img {
+            float: right;
+            width: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .login_box_r_img img {
+            width: 100%;
+            height: auto;
+        }
+
+        .jineng span {
+            padding: 5px 10px;
+            border-radius: 23px;
+            color: #fff;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .jineng span:nth-of-type(1) {
+            background-image: linear-gradient(to right, #8590fb, #4cc2d7);
+            box-shadow: 0 0 10px #8590fb;
+
+        }
+
+        .jineng span:nth-of-type(2) {
+            background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 0 10px #4cc2d7;
+            box-shadow: 0 0 10px #f093fb;
+        }
+
+        .jineng span:nth-of-type(3) {
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+            box-shadow: 0 0 10px #d4fc79;
+        }
+
+        /* 个人信息部分 */
+        .uInfo {
+            position: relative;
+            height: 210px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 3px 10px #eee;
+            margin-bottom: 20px;
+        }
+
+        .uInfo_img_box {
+            float: left;
+            width: 30%;
+            height: 100%;
+        }
+
+        .uInfo_img {
+            position: absolute;
+            top: 50%;
+            margin-top: -70px;
+            width: 100%;
+            height: 50%;
+            background: url('../image/user_info_bg.jpeg') no-repeat;
+            background-size: contain;
+        }
+
+        .uInfo_text {
+            display: table;
+            float: right;
+            width: 70%;
+            padding-left: 20px;
+            height: 100%;
+            line-height: 200px;
+        }
+
+        .uInfo_text_wrap {
+            display: inline-block;
+            line-height: 30px;
+        }
+
+        .uInfo_text i {
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700s;
+        }
+
+        .uInfo_text span {
+
+            color: #666;
+        }
+
+        /* 投递部分样式 */
+        .td_box {
+            box-shadow: 0 3px 5px #eee;
+
+            height: 200px;
+        }
+
+        .td_box .td_title {
+            height: 50px;
+        }
+
+        .td_box .user_xg {
+            height: 150px;
+
+        }
+
+        .user_xg .user_xg_item {
+            text-align: center;
+            width: 25%;
+        }
+
+        .user_xg_item i {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            background: url() no-repeat;
+            background-size: cover;
+        }
+
+        .user_xg_item p {
+            font-size: 16px;
+        }
+
+        .user_xg_item:nth-of-type(1) i {
+            background-image: url('../image/img_icon/19.png');
+        }
+
+        .user_xg_item:nth-of-type(2) i {
+            background-image: url('../image/img_icon/7.png');
+        }
+
+        .user_xg_item:nth-of-type(3) i {
+            background-image: url('../image/img_icon/8.png');
+        }
+
+        .user_xg_item:nth-of-type(4) i {
+            background-image: url('../image/img_icon/9.png');
+        }
+
+        /* user_links 部分样式*/
+
+        .user_links .aui-list-item i {
+            padding-top: 15px;
+            margin-right: 10px;
+        }
+
+        .user_links {
+            color: 18px;
+        }
+        .Mg_tempList {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="Mg_tempList">
+
+        </div>
+    </main>
+</body>
+<script id="Mg_tempList" type="text/template">
+
+    <div class="login_box">
+            <div class="login_box_l">
+                <div class="notLogin">
+                    {{? !it.uname}}
+                    <div class="title" tapmode onclick="needLogin();"> 登录/注册</div>
+                    {{??}}
+                    <div class="title"> {{= it.uname}} </div>
+                    {{?}}
+                    {{? !it.uname}}
+                    <div class="qianming"> 暂无个性签名，请登录/注册,立即添加属于自己的个性签名吧！</div>
+                    {{?? it.uname && !it.uqianming}}
+                    <div class="qianming"> 您还没有添加个性标签哦，快去下方添加吧~</div>
+                    {{??}}
+                    <div class="qianming"> {{= it.uqianming}} </div>
+                    {{?}}
+                </div>
+                {{? !it.uname}}
+                <div class="jineng">
+                    <span>工作热情高</span>
+                    <span>责任心强</span>
+                    <span>适应能力强</span>
+                </div>
+                {{??}}
+                <div class="jineng">
+                        <span> {{= (it.tips)[0]}} </span>
+                        <span> {{= (it.tips)[1]}} </span>
+                        <span> {{= (it.tips)[2]}} </span>
+                    </div>
+                    {{?}}
+            </div>
+            <div class="login_box_r">
+                <h5>点击头像切换用户</h5>
+                <div class="login_box_r_img" tapmode onclick="switchUser();">
+                    {{? !it.uname}}
+                    <img src="../image/Mg_user_no.png" alt="" title="点击切换用户">
+                    {{??}}
+                    <img src="../image/Mg_user_yes.png" alt="" title="点击切换用户">
+                    {{?}}
+                </div>
+            </div>
+        </div>
+        <div class="uInfo">
+            <div class="uInfo_img_box">
+                <div class="uInfo_img"></div>
+            </div>
+            <div class="uInfo_text clearfix" tapmode >
+                <div class="uInfo_text_wrap">
+
+                    <i>我的信息</i> <br />
+                    <span>补全个人信息方便更多的职位向您招手哦~</span>
+                </div>
+            </div>
+        </div>
+        <!-- 投递部分 -->
+        <div class="td_box">
+            <div class="td_title ">
+                <span class="title-1">我的投递</span>
+            </div>
+            <div class="user_xg flex-sb flex-h">
+                <div class="user_xg_item all" tapmode onclick="zsAllZp();">
+                    <i></i>
+                    <p>全部</p>
+                </div>
+                <div class="user_xg_item send" tapmode onclick="getBmZp();">
+                    <i></i>
+                    <p>已报名</p>
+                </div>
+                <div class="user_xg_item ing" tapmode onclick="getIngZp();">
+                    <i></i>
+                    <p>进行中</p>
+                </div>
+                <div class="user_xg_item done" tapmode onclick="getDoneZp();">
+                    <i></i>
+                    <p>已完成</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="user_links">
+            <ul class="aui-list aui-list-in">
+                <li class="aui-list-item aui-list-item-middle sc" tapmode onclick="getScZp();">
+                    <i class="fa fa-heart"></i>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        我的收藏
+                    </div>
+                </li>
+                <li class="aui-list-item callus" tapmode>
+                    <i class="fa fa-envelope "></i>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        联系我们
+                    </div>
+                </li>
+                <li class="aui-list-item" tapmode onclick="aboutus();">
+                    <i class="fa fa-info-circle "></i>
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+                        关于我们
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/Mg_main_user.html"></script>
+
+<script>
+    apiready = function () {
+        api.parseTapmode();
+        // 每个页面进入都存入本地名称方便login页面进行判断
+        putInFm();
+        serieTemp();
+        // 如果在当前页面不加载的时候件听一个更新时间
+        api.addEventListener({
+            name: 'updateUser'
+        }, function(ret, err){
+            console.log('接受到用户界面更新事件');
+            // 隐藏arcMenu
+            api.execScript({
+                frameName: 'Mg_main',
+                script:'hideArc();'
+            });
+            serieTemp();
+        });
+
+    }
+    function serieTemp() {
+        var Mg_uInfo =  $api.getStorage('Mg_uInfo') || {};
+        console.log(JSON.stringify(Mg_uInfo));
+        
+        getCorectTips(Mg_uInfo);
+        getuInfo(Mg_uInfo);
+        getIconColored();
+    }
+    // 获取用户信息
+    function getuInfo(Mg_uInfo) {
+        console.log(JSON.stringify(Mg_uInfo));
+        
+        // 渲染模板
+        Mg_temp(Mg_uInfo);
+    }
+
+    // 处理特点技能部分的数据
+    function  getCorectTips(Mg_uInfo) {
+        if(Mg_uInfo.uname) {
+            console.log(JSON.stringify(Mg_uInfo.utips));
+            Mg_uInfo.tips = (Mg_uInfo.utips).split('，');
+            console.log(JSON.stringify(Mg_uInfo));
+            
+        }
+    }
+    // 添加个人信息页 
+
+    function setUserDetail() {
+        console.log('11111111111112222');
+        
+        var Mg_uInfo = $api.getStorage('Mg_uInfo');
+       if(!Mg_uInfo.uname) {
+           api.openFrame({
+               name: 'get_in',
+               url: 'get_in.html',
+               bounces: false,
+               rect: {
+                   x: 0,
+                   y: 0,
+                   w: 'auto',
+                   h: 'auto'
+               },
+               pageParam:Mg_uInfo
+           });
+       } else {
+           api.openWin({
+               name: 'Mg_user_detail',
+               url: 'Mg_user_detail.html',
+               bounces: false,
+               pageParam: Mg_uInfo
+           });
+       }
+    }
+
+    // 事件委托
+    $('.Mg_tempList').on('click','.uInfo',function() {
+        console.log('22222222222222');
+        
+        setUserDetail();
+    })
+    // 全部相关信息 
+    function zsAllZp() {
+       if(!needLogin()) return;
+        api.openWin({
+            name: 'all_zp',
+            url: 'all_zp.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+    }
+    function getBmZp() {
+        if(!needLogin()) return;
+        api.openWin({
+            name: 'bm_zp',
+            url: 'bm_zp.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+    }
+    function getIngZp() {
+        if(!needLogin()) return;
+        api.openWin({
+            name: 'ing_zp',
+            url: 'ing_zp.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+
+    }
+    function getDoneZp() {
+        if(!needLogin()) return;
+        api.openWin({
+            name: 'done_zp',
+            url: 'done_zp.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+
+    }
+    function getScZp() {
+        if(!needLogin()) return;
+        api.openWin({
+            name: 'sc_zp',
+            url: 'sc_zp.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+
+    }
+
+    // 切换用户
+    function switchUser() {
+        $api.rmStorage('Mg_uInfo');
+        api.openFrame({
+            name: 'get_in',
+            url: 'get_in.html',
+            bounces: false,
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            }
+        });
+    }
+
+    // 联系我们页
+    function callus() {
+        api.openWin({
+            name: 'callus',
+            url: 'callus.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+    }
+    $('.Mg_tempList').on('click','.callus',function() {
+        callus();
+    })
+    
+
+    function aboutus() {
+        api.openWin({
+            name: 'aboutus',
+            url: 'aboutus.html',
+            bounces: false,
+            pageParam: {key : 'value'}
+        });
+    }
+    $('.Mg_tempList').on('click','.callus',function() {
+        callus();
+    })
+
+    // 关于我们页
+</script>
+  
+
+</html>

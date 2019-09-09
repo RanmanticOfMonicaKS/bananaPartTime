@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+
+  <title>title</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/font-awesome.min.css">
+  <style>
+    body {
+      padding: .5rem;
+      background-color: #fff;
+    }
+
+    .gotoMg {
+      height: 50px;
+    }
+
+    /* 右上角部分样式 */
+    .look {
+      position: absolute;
+      top: 60%;
+      left: 10%;
+      display: none;
+      color: #333;
+      font-size: 16px;
+      padding: 20px 0;
+    }
+
+    .closef {
+      display: none;
+      float: right;
+      font-size: 20px;
+      color: #000;
+      padding: 10px;
+    }
+
+    /* 欢迎部分样式 */
+    .welcome {
+      height: 100px;
+      line-height: 40px;
+    }
+
+    .welcome .title {
+      font-weight: 700;
+      font-size: 20px;
+
+    }
+
+    .welcome .tips {
+      font-size: 16px;
+      color: #ccc;
+
+    }
+
+    .login_con {
+      line-height: 40px;
+    }
+
+    .login_con li {
+      position: relative;
+      height: 100px;
+    }
+
+    li.pwd_cnt {
+      height: 50px;
+      line-height: 50px;
+    }
+
+    .login_con .lostPwd {
+      padding: 10px;
+      float: left;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .login_con .sign {
+      float: right;
+    }
+
+    .Mg_login_btn {
+      height: 50px;
+      line-height: 50px;
+
+    }
+
+    .Mg_login_btn {
+      position: absolute;
+      width: 80%;
+      height: 50px;
+      background-color: #f8d840;
+      border-radius: 25px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, .1);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gotoMg">
+    <div class="closef fa fa-times-circle " onclick="gotoMg();" tapmode></div>
+  </div>
+
+  <!-- 欢迎 标题  -->
+  <div class="welcome">
+    <div class="title">
+      hello,香蕉兼职欢迎您~
+    </div>
+    <div class="tips">
+      立即登录获取更多好工作~
+    </div>
+  </div>
+
+  <!-- 登录部分  -->
+  <ul class="login_con">
+    <li>
+      <label for="Mg_phone">
+        手机号
+      </label>
+      <br />
+      +86 &nbsp;&nbsp;&nbsp;
+      <input type="number" placeholder="请输入手机号" id="Mg_phone">
+    </li>
+    <li>
+      <label for="Mg_password">
+        密码
+      </label>
+      <br />
+      <input type="password" placeholder="请输入密码" id="Mg_password">
+
+    </li>
+    <li class="pwd_cnt">
+      <div class="lostPwd" tapmode onclick="MgLostPwdbtn();">忘记密码</div>
+      <div class="sign" tapmode onclick="goToSign();">立即注册</div>
+    </li>
+    <li class="Mg_login" tapmode onclick="MgLoginbtn();">
+      <div class="Mg_login_btn">
+        登录
+      </div>
+      <div class="look " onclick="gotoMg();" tapmode>先瞅瞅</div>
+
+    </li>
+  </ul>
+
+</body>
+<script type="text/javascript" src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/get_in.js"></script>
+<script type="text/javascript">
+  hasLoginOr() ? $('.closef').show().siblings('.look').hide() : $('.look').show().siblings('.closef').hide();
+  apiready = function () {
+    api.parseTapmode();
+    $api.fixStatusBar($api.dom('.welcome'));
+    console.log(JSON.stringify(api.pageParam));
+    lisBack().then(ret => {
+      lisBackTo();
+    })
+    // 缓存home_zs中的数据
+    getCache();
+    console.log('完成缓存');
+
+    // 表单验证
+    checkLoginParam();
+    closeExistArc();
+    adminSet();
+  };
+
+  function closeExistArc() {
+    console.log(JSON.stringify(api.pageParam));
+    // if(api.pageParam.name != '' ) {
+    // api.execScript({
+    //   frameName: 'Mg_main',
+    //   script:'hideArc();'
+    // });
+    // }
+  }
+
+  function gotoMg(pageParam = {}) {
+    var index = $api.getStorage('index');
+    api.sendEvent({
+      name: 'updateUser',
+      extra: {
+        key: ' value'
+      }
+    });
+    setTimeout(() => {
+      api.closeFrame({});
+    }, 300)
+    api.openFrame({
+      name: 'Mg_main',
+      url: './Mg_main.html',
+      rect: {
+        x: 0,
+        y: 0,
+        w: 'auto',
+        h: 'auto'
+      },
+      pageParam: {
+        name: pageParam
+      },
+      reload: true,
+      bounces: false,
+      vScrollBarEnabled: true,
+      hScrollBarEnabled: true
+    });
+  }
+
+  // 对后退回调进行封装
+  function lisBack() {
+    var promise = new Promise((resolve, reject) => {
+      api.addEventListener({
+        name: 'keyback'
+      }, function (ret, err) {
+        if (ret) {
+          resolve(ret);
+        } else {
+          rejcet(err);
+        }
+      });
+    })
+    return promise;
+  }
+
+
+  function lisBackTo() {
+    // 判断登录页面来源  是否有其他页面运行
+    var frames = api.frames();
+    console.log(JSON.stringify(frames));
+    return frames.length > 0 ? api.closeFrame() : getOutMeg();
+  }
+
+
+  // 回退信息提示
+  // function getOutMeg() {
+  //   api.execScript({
+  //       name: 'root',
+  //       script: 'getOutMeg();'
+  //   });
+  // }
+  var flag = false;
+
+  function getOutMeg() {
+    if (!flag) {
+      api.toast({
+        msg: api.appName + ': 再按一次返回键退出',
+        duration: 2000,
+        location: 'bottom'
+      });
+    }
+    setTimeout(function () {
+      flag = false;
+    }, 2500);
+    if (flag) {
+      flag = false;
+      api.closeWidget({
+        silent: true
+      });
+    }
+    flag = true;
+  }
+
+  // 注册页面
+  function goToSign() {
+    api.openWin({
+      name: 'Mg_sign',
+      url: 'Mg_sign.html',
+      bounces: false,
+      pageParam: {
+        key: 'value'
+      }
+    });
+  }
+
+
+  function adminSet() {
+    api.ajax({
+      url: '',
+      method: 'post',
+      timeout: 30,
+      dataType: 'json',
+      returnAll: false
+    }, function (ret, err) {
+      if (ret) {
+        // TODO 
+      } else {
+        api.alert({
+          msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+        });
+      };
+    });
+  }
+
+  function adminSet() {
+    console.log('执行指令');
+
+    api.ajax({
+      url: baseUrl + 'ks/ks/getAdminInfo.ksrun',
+      method: 'post',
+      timeout: 30,
+      dataType: 'json',
+      returnAll: false,
+      data: {
+        body: {
+          ks_data: {
+            id: '1'
+          }
+        }
+      }
+    }, function (ret, err) {
+      if (ret) {
+        // TODO 
+        console.log(JSON.stringify(ret) + '--- 管理员指令');
+        if (ret.ks_data && ret.ks_data.records && ret.ks_data.records.length != 0) {
+          $api.setStorage('adminInfo', ret.ks_data.records[0]);
+        }
+      } else {
+          // api.toast({
+          //   msg: api.appName + ': 网络无连接，请检查您的网络',
+          //   duration: 2000,
+          //   location: 'bottom'
+          // });    
+          api.alert({
+        msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+      });
+      };
+    });
+  }
+</script>
+
+</html>

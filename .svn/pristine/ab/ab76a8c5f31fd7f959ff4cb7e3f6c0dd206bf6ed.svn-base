@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+
+    <title>Document</title>
+    <style>
+        body {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+        <div class="header">
+                <div class="top">
+                    <i class="fa fa-chevron-left" tapmode onclick="api.closeWin();"></i>
+                    <div class="title">
+                        
+                    </div>
+                </div>
+            </div>
+</body>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+
+<script>
+    apiready = function () {
+        api.parseTapmode();
+        $api.fixStatusBar($api.dom('.header'));
+        console.log(JSON.stringify(api.pageParam));
+        var param = api.pageParam;
+        var ttTxt ;
+        switch (param.zpMap) {
+            case 'home_tj_1':
+            ttTxt = '在家赚钱'
+                break;
+                case 'home_tj_2':
+            ttTxt = '兼职急招'
+                break;
+                case 'home_tj_3':
+            ttTxt = '优质上岗'
+                break;
+                case 'home_tj_4':
+            ttTxt = '大牌直聘'
+                break;
+                case 'home_tj_5':
+            ttTxt = '轻松好做'
+                break;
+                case 'search_cate_1':
+            ttTxt = '高薪直聘'
+                break;
+                case 'search_cate_2':
+            ttTxt = '当日结算'
+                break;
+                case 'search_cate_3':
+            ttTxt = '品牌专区'
+                break;
+                case 'search_swiper_1':
+            ttTxt = '高薪招聘'
+            case '学生喜爱':
+            ttTxt = '品牌专区'
+            case 'search_swiper_3':
+            ttTxt = '立即上班'
+  
+
+            default:
+                break;
+        }
+        $('.title').text(ttTxt); 
+        var headerH  = $api.offset($api.dom('.header')).h;
+        api.openFrame({
+            name: 'Mg_zp_cate_fm',
+            url: './Mg_zp_cate_fm.html',
+            bounces: false,
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },pageParam:{zpMap:param.zpMap}
+        });   
+    }
+</script>
+</html>

@@ -1,0 +1,282 @@
+
+
+body,
+html {
+  height: 100%;
+  background-color:#fff;
+  box-sizing: border-box;
+}
+body {
+  padding: 5px;
+}
+
+.flex-sb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+
+
+.flex-sa {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+
+
+.flex-c {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+
+
+.fiex-1 {
+  -webkit-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex-shrink: 1;
+  flex-shrink: 1;
+}
+
+
+
+
+
+.wrap {
+  background-color: #ccc;
+  height: 100%;
+}
+.main_content {
+    height: 80%;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.footer .aui-bar-tab-item {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+.footer .aui-active {
+  color: #36d1a5;
+}
+
+
+@keyframes hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(-360deg);
+  }
+}
+
+
+
+
+.wrap {
+  position: relative;
+  background-image: linear-gradient(92deg, #59493f 0%, #dfc7af 100%);
+
+  height: 100%;
+}
+.aui-bar-nav {
+    background-image: linear-gradient(92deg, #59493f 0%, #dfc7af 100%);
+
+}
+.aui-bar-nav .aui-btn {
+    left:20px;
+    padding: 20px;
+    z-index: 999;
+}
+
+
+
+/*  清除aui-list-item默认边线*/
+.aui-list:before,
+.aui-list:after,
+.aui-list-item:after,
+.aui-list.aui-list-in .aui-list-item-inner:after {
+  display: none;
+}
+/* 模板部分样式 */
+.Mg_tempList {
+  position: relative;
+  /* background-color: #ccc; */
+
+  padding:  20px 0;
+}
+
+.Mg_temp_item .dz {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #dfc7af;
+  box-shadow: -2px -2px 0px #666;
+}
+
+.Mg_temp_item {
+  background-color:#fff;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  color:#666;
+  box-shadow: 0 1px 0 #eee;
+}
+.Mg_temp_item .title {
+  font-weight: 700;
+  color:#000;
+}
+.Mg_temp_item i {
+  margin-right: 5px;
+  font-size: 16px;
+}
+.Mg_temp_item i::before {
+  padding-bottom: 10px;
+
+}
+.Mg_temp_item .fa.fa-thumbs-up::before,
+.Mg_temp_item .fa.fa-fire::before {
+  padding-bottom: 10px;
+  font-size: 18px;
+}
+.Mg_temp_item span {
+  display: inline;
+  margin-right: 10px;
+  font-size: 12px;
+}
+.Mg_temp_item .cop,
+.Mg_temp_item .laction {
+  padding-top: 10px;
+}
+.Mg_temp_item .pay {
+  color:red;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.Mg_temp_item div {
+  margin-bottom: 10px;
+}
+
+
+
+.temp_hd {
+  color: darkgreen;
+  font-weight: bold;
+}
+
+.temp_hd .edit {
+  padding: 2px 20px;
+  background-color: #36D1A5;
+  color: #fff;
+}
+
+/* 设置区域滚动 */
+main {
+  overflow : auto;
+  -webkit-overflow-scrolling: touch;
+  position: static;
+  box-sizing: border-box;
+  height: 100%;
+}
+.Mg_wrap {
+  height: 150%;
+}
+/* 头部 */
+
+.top {
+  line-height: 50px;
+  height: 50px;
+}
+.top .title {
+  float: left;
+  font-weight: 700;
+  font-size: 25px;
+  height: 100%;
+}
+.top .search {
+  width: 2.5rem;
+  height: 100%;
+  float: right;
+  font-size: 25px;
+  padding: 10px 0 0 10px;
+}
+
+.top i {
+  float: left;
+  height: 100%;
+  padding: 12px 20px 0 20px;
+  font-size: 25px;
+}
+/* 文本底部的黄色 ，垫底层 */
+.bg {
+  position: absolute;
+  height: 50%;
+  left: 20%; 
+  width: 100%;
+  background-color: #f8d840;
+  bottom: 0;
+  border-radius: 5px;
+  transform: translateY(50%);
+}
+input[type=password] {
+  padding-left: 10px;
+}
+/* 标题样式 */ 
+.v-title {
+  margin: 20px 0;
+}
+.text-1 {
+  height: 30px;
+  padding-left: 10px;
+  line-height: 30px;
+  background-color: #f8d840;
+  border-radius: 15px;
+  font-size: 18px;
+}
+
+.title-1 {
+  height: 30px;
+  height: 30px;
+  line-height: 30px;
+  background-color: #f8d840;
+  border-radius: 50%;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+/* 部分标记icon 的颜色 */
+.fa.fa-thumbs-up {
+  color:#a691c4;
+
+}
+.fa.fa-fire {
+  color:#e4007f;
+}
+.fa.fa-location-arrow {
+  color:#36D1A5;
+}

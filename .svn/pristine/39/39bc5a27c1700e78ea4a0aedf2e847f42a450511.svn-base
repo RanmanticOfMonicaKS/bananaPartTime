@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Document</title>
+    <style>
+        /*  图片位置  */
+    </style>
+</head>
+<body>
+    <div class="offline">
+        没有网络
+    </div>
+</body>
+<script type="text/javascript" src="./script/depences/api.js"></script>
+<script src="./script/depences/jquery.min.js"></script>
+<script src="./script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        
+
+    }
+        
+
+</script>
+</html>

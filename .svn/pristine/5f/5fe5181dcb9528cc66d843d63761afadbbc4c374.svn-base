@@ -1,0 +1,164 @@
+          // 监听隐藏 避免遮盖其他页面
+          function lisShowArc() {
+              // 监听处理缓存不重新执行的情况
+              api.addEventListener({
+                  name: 'showArc'
+              }, function(ret, err) {
+                  showArc();
+              });
+          }
+
+          // 打开环形菜单
+          function openArcmenu() {
+              var headerH = JSON.parse($api.getStorage('headerH'));
+              console.log(JSON.stringify(headerH));
+              var textTop = $('.text-1')
+              arcMenu.open({
+                  type: 'arc',
+                  mainMenu: {
+                      x: .5 * api.winWidth,
+                      y: headerH + .25 * api.winWidth + 160,
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/home_yz_arc2.png',
+                      imgLight: 'widget://image/img_icon/home_yz_arc2.png'
+                  },
+                  items: [{
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/1.png',
+                      imgLight: 'widget://image/img_icon/1.png'
+                  }, {
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/2.png',
+                      imgLight: 'widget://image/img_icon/2.png'
+                  }, {
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/3.png',
+                      imgLight: 'widget://image/img_icon/3.png'
+                  }, {
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/4.png',
+                      imgLight: 'widget://image/img_icon/4.png'
+                  }, {
+                      w: 50,
+                      h: 50,
+                      img: 'widget://image/img_icon/5.png',
+                      imgLight: 'widget://image/img_icon/5.png'
+                  }],
+                  startAngle: -90,
+                  wholeAngle: 180,
+                  radius: 100
+              }, function(ret, err) {
+                  if (ret) {
+                      console.log(JSON.stringify(ret));
+                      var  id = ret.id;
+                    $api.setStorage('arcMenu', id);
+
+                          if (id != 1) hideArc(id)
+                      var index = ret.index;
+                      var zpMap;
+                      var cateTitle;
+                      switch (index) {
+                          case 0:
+                              zpMap = 'home_tj_1';
+                              break;
+                          case 1:
+                              zpMap = 'home_tj_2';
+
+                              break;
+                          case 2:
+                              zpMap = 'home_tj_3';
+
+                              break;
+                          case 3:
+                              zpMap = 'home_tj_4';
+
+                              break;
+                          case 4:
+                              zpMap = 'home_tj_5';
+
+                              break;
+                      }
+                      console.log(JSON.stringify(zpMap));
+
+                      console.log('打开win--------');
+                      if (zpMap) {
+
+                          api.openWin({
+                              name: 'Mg_zp_cate_win',
+                              url: 'Mg_zp_cate_win.html',
+                              bounces: false,
+                              pageParam: {
+                                  zpMap
+                              }
+                          });
+                      }
+                  } else {
+                      console.log(JSON.stringify(err));
+                  }
+              });
+          }
+
+
+          function hideArc() {
+              console.log('调用了隐藏方法---' + JSON.stringify(id));
+            var id =  $api.getStorage('arcMenu');
+            console.log(JSON.stringify(id));
+            
+              arcMenu.hide({
+                  id: id
+              });
+          };
+
+          function showArc() {
+            console.log('调用了显示方法----'+JSON.stringify(id));
+            var id =  $api.getStorage('arcMenu');
+            console.log(JSON.stringify(id));
+
+              arcMenu.show({
+                  id: id
+              });
+          };
+
+
+          function closeArc() {
+              console.log('关闭了');
+
+              arcMenu.close({
+                  id: id
+              });
+          }
+
+
+          function adminSet() {
+              console.log('执行指令');
+
+              api.ajax({
+                  url: baseUrl + 'ks/getAdminInfo.ksrun',
+                  method: 'post',
+                  timeout: 30,
+                  dataType: 'json',
+                  returnAll: false,
+                  data: {
+                      body: {
+                          ks_data: {
+                              id: '1'
+                          }
+                      }
+                  }
+              }, function(ret, err) {
+                  if (ret) {
+                      // TODO
+                      console.log(JSON.stringify(ret) + '--- 管理员指令');
+
+                  } else {
+                      api.alert({
+                          msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+                      });
+                  };
+              });
+          }

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <style>
+        .aui-bar-tab-item.active {
+            color: #eede55;
+        }
+
+        .aui-bar-tab-item {
+            color: #ccc;
+        }
+
+        .footer {
+            border-radius: .5rem .5rem 0 0;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, .8);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="top">
+            <div class="title">
+                香蕉兼职
+            </div>
+        </div>
+    </div>
+    <bottn onclick="gotoLogin();" tapmode style="display: none;">去首页</bottn>
+    <div class="aui-bar aui-bar-tab footer">
+        <div class="aui-bar-tab-item active" tapmode data-fm="Mg_main_home_fm">
+            <span class="Mg_main_home fa fa-home"></span>
+            <div class="aui-bar-tab-label">首页</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode data-fm="Mg_main_search_fm">
+            <span class="Mg_main_search fa fa-search"></span>
+            <div class="aui-bar-tab-label">发现</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode data-fm="Mg_main_all_fm">
+            <span class="Mg_main_all fa fa-file-text-o"></span>
+            <div class="aui-bar-tab-label">全部</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode data-fm="Mg_main_msg_fm">
+            <span class="Mg_main_msg fa fa-comment-o"></span>
+            <div class="aui-bar-tab-label">消息</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode data-fm="Mg_main_user_fm">
+            <span class="Mg_main_user fa fa-user-circle-o"></span>
+            <div class="aui-bar-tab-label">我的</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/Mg_main.js"></script>
+<script type="text/javascript">
+    var id;
+    var arcMenu;
+    var systemTyp;
+    apiready = function () {
+        systemType = api.systemType;
+        arcMenu = api.require('arcMenu');
+        api.parseTapmode();
+        MgFrameGroup();
+        MgSwitchFrames();
+        backToRoot();
+        // 监听跳转回来的页面，显示主页
+        openArcmenu();
+        keepActiveSame();
+        // 在此进入，如果本地index ！=0
+        // 管理员指令
+        adminSet();
+    }
+
+    // 存入footerH
+    function setFooterH() {}
+
+
+    // 打开framegroup ，虽然很坑，但是注意一下，毕竟有缓存
+
+    function MgFrameGroup() {
+        var headerH = $api.fixStatusBar($api.dom('.header'));
+        console.log(JSON.stringify(headerH));
+
+        var footerH = $api.offset($api.dom('.footer')).h;
+        $api.setStorage('footerH', footerH);
+        $api.setStorage('headerH', headerH);
+
+        api.openFrameGroup({
+            name: 'Mg_group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                marginBottom: footerH + 5 // 给底部阴影一个机会
+            },
+            index: 0,
+            frames: [{
+                name: 'Mg_main_home',
+                url: 'Mg_main_home.html'
+            }, {
+                name: 'Mg_main_search',
+                url: 'Mg_main_search.html'
+            }, {
+                name: 'Mg_main_all',
+                url: 'Mg_main_all.html'
+            }, {
+                name: 'Mg_main_msg',
+                url: 'Mg_main_msg.html'
+            }, {
+                name: 'Mg_main_user',
+                url: 'Mg_main_user.html'
+            }]
+        }, function (ret, err) {
+            //
+            winToTop();
+            var name = ret.name;
+            var index = ret.index;
+            console.log('进入framegroup');
+
+            // 存入本地，
+            $api.setStorage('index', index);
+            $('.aui-bar-tab-item').eq(index).addClass('active').siblings().removeClass('active');
+            var headerText;
+            switch (index) {
+                case 0:
+                    headerText = '香蕉兼职'
+                    break;
+                case 1:
+                    headerText = '发现'
+                    break;
+                case 2:
+                    headerText = '全部'
+                    break;
+                case 3:
+                    headerText = '消息'
+                    break;
+                case 4:
+                    headerText = '我的'
+                    break;
+            }
+
+            $('.top>.title').text(headerText);
+            // 关闭打开arc
+            console.log(JSON.stringify(systemType));
+
+            if (index == 0) {
+                showArc();
+            }
+            // 无法在当前页面使用exec所以才出现检测不到的bug
+            else {
+
+                hideArc();
+            }
+
+
+        });
+    }
+
+
+
+    // 点击切换frame
+    function MgSwitchFrames() {
+        $('.aui-bar-tab-item').on('click', function () {
+            var index = $(this).index();
+            api.setFrameGroupIndex({
+                name: 'Mg_group',
+                index: index,
+                scroll: false
+            });
+            // 关闭打开arc
+            if (index == 0) {
+                showArc();
+            }
+            else {
+
+                hideArc();
+            }
+
+        })
+    }
+    // 混淆
+    function hxaaa() {
+        getFooterH().then(function (v) {
+            var promise = new Promise(resolve => {
+                var footerH = 0;
+                var headerH = $api.offset($api.dom('.header')).h;
+                console.log(JSON.stringify(v));
+                footerH = v
+                var a = {
+                    footerH,
+                    headerH
+                }
+                console.log(JSON.stringify(footerH) + '----------' + JSON.stringify(headerH));
+                resolve(a);
+            })
+            promise.then(a => {
+                // a 上一个页面的高度
+                api.setPrefs({
+                    key: 'a',
+                    value: JSON.stringify(a)
+                });
+            })
+        });
+    }
+
+
+    function backToRoot() {
+        api.addEventListener({
+            name: 'backToRoot'
+        }, function (ret, err) {
+            api.closeToWin({
+                name: 'root',
+                animation: {
+                    type: 'flip',
+                    subType: 'from_bottom',
+                    duration: 500
+                }
+            });
+            api.setFrameGroupIndex({
+                name: 'Mg_group',
+                index: 0,
+                scroll: true
+            });
+        });
+    }
+
+    // 每次进入的时候哦，进行一次，底部对应
+    function keepActiveSame() {
+        var index = $api.getStorage('index');
+        $('.aui-bar-tab-item').eq(index).addClass('active').siblings().removeClass('active');
+
+
+    }
+</script>
+
+</html>

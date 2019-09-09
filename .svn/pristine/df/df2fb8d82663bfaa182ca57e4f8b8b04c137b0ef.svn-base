@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/jquery-weui.min.css">
+
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            background-color: transparent !important;
+        }
+        .Mg_tempList {
+            position: relative;
+            height: 100%;
+
+        }
+        .msg_box {
+            box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .msg_box_item {
+            text-align: center;
+            -webkit-flex: 1;
+            flex: 1;
+            width: 30%;
+            height: 5rem;
+        }
+
+        .msg_box_item i {
+            padding-top: .6rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: inline-block;
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: .6rem;
+            box-shadow: 0 0 .75rem #fff;
+        }
+
+        .msg_box_item:nth-of-type(1) i {
+            /*  使用nth要注意的就是一定要拿到多i*/
+            background-image: linear-gradient(to right, #8590fb, #4cc2d7);
+        }
+
+        .msg_box_item:nth-of-type(2) i {
+            background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+        }
+
+        .msg_box_item:nth-of-type(3) i {
+            background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+        }
+
+        /* 没有消息提醒样式 */
+
+        .noMsgTip {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            color: #ccc;
+            text-align: center;
+            background-image: url('../image/noMsgTip.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .noMsgTip .text {
+            position: absolute;
+            left: 50%;
+            top: 60%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 客服拟态 */
+        .kf_mask {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .2);
+        }
+
+        .kf_box {
+            position: absolute;
+            width: 70%;
+            height: 200px;
+            left: 15%;
+            top: 50%;
+            background-color: #fff;
+            text-align: center;
+            transform: translate(0, -50%);
+            border-radius: 20px;
+        }
+
+        .kf_btn {
+            position: absolute;
+            bottom: 0;
+            width: 60%;
+            height: 50px;
+            left: 50%;
+            margin-top: -25px;
+            transform: translate(-50%, 50%);
+            background-color: #f8d840;
+            text-align: center;
+            line-height: 50px;
+            border-radius: 25px;
+            box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+        }
+
+        .kf_text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+
+        }
+
+        .kf_text i {
+            color: #fbc2eb;
+        }
+    </style>
+</head>
+
+<body tapmode>
+    <div class="Mg_tempList">
+
+    </div>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <div class="kf_box" tapmode>
+        <div class="kf_btn" tapmode onclick="copyText();">
+            复制
+        </div>
+        <div class="kf_text">
+            客服联系方式<br /> <br />
+            <i class="fa {{= it.kflinktype}}"></i> &nbsp;<span class="kf_connect">{{= it.kflink }}</span>
+        </div>
+    </div>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/depences/doT.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/depences/jquery-weui.min.js"></script>
+<script>
+    var clipBoard;
+    var clickP = 0;
+    apiready = function () {
+        api.parseTapmode();
+        clipBoard = api.require('clipBoard');
+        tapCloseFrame();
+        getKfInfo();
+    }
+
+    function copyText() {
+        var value = $('.kf_connect').text();
+        clipBoard.set({
+            value
+        }, function (ret, err) {
+            if (ret) {
+                api.toast({
+                    msg: '复制成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                api.closeFrame({});
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    // 点击其他部分，关闭窗口功能
+    function tapCloseFrame() {
+
+        document.documentElement.ontouchstart = function (e) {
+            e.stopPropagation();
+            console.log('点了document' + JSON.stringify(e));
+            api.closeFrame({});
+
+        }
+
+
+    }
+
+    // 获取客服信息
+    function getKfInfo() {
+        api.ajax({
+            url: baseUrl + 'ks/getKfInfo.ksrun',
+            method: 'post',
+            timeout: 30,
+            dataType: 'json',
+            returnAll: false,
+            data: {
+                body: {
+                    ks_data: {
+                        id: '1'
+                    }
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                // TODO 
+                console.log(JSON.stringify(ret));
+                if (ret.ks_data && ret.ks_data.total > 0) {
+                    var data = ret.ks_data.records[0];
+                    if (data.kflinktype == '1') {
+                        data.kflinktype = 'fa-qq';
+                    }
+                    if (data.kflinktype == '2') {
+                        data.kflinktype = 'fa-phone'
+                    }
+                    Mg_temp(data);
+                    document.querySelector('.kf_box').ontouchstart = function (e) {
+                        e.stopPropagation();
+                        console.log('点了kf_box' + JSON.stringify(e));
+
+                    }
+                }
+            } else {
+                api.alert({
+                    msg: ('错误码：' + err.code + '；错误信息：' + err.msg + '网络状态码：' + err.statusCode)
+                });
+            };
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,133 @@
+
+// 进入get——in页面的时候就获取一边在maingroup中的数据，提高用户体验 
+function getCache() {
+    console.log('异步好像是有一些问题的');
+
+}
+
+
+// 登录验证
+function checkLoginParam() {
+    $('#Mg_phone').on('blur',function () {
+        var uName  = $(this).val().trim();
+        if (!uName ) {
+			api.toast({
+				msg: '手机号不能为空',
+				duration: 2000,
+				location: 'bottom'
+			});
+			return;
+        }
+        if(!(/^1[34578]\d{9}$/.test(uName))) {
+            return api.toast({
+                msg: '输入的手机号码不正确',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+
+        
+    })
+
+    $('#Mg_password').on('blur',function() {
+        var uPassword = $(this).val().trim();
+        if(!uPassword) {
+            return api.toast({
+                msg: '',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+        if(uPassword.length <4 || uPassword.length >12)  {
+            return api.toast({
+                msg: '请输入4-12位的密码',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+
+    })
+}
+
+
+
+// 发送ajax请求登录验证的函数
+
+
+function MgLoginbtn() {
+    var uName  = $('#Mg_phone').val();
+    var uPassword = $('#Mg_password').val();
+    api.showProgress({
+        title: ' 正在验证登录',
+        text: ' 请稍后',
+        modal:  true
+    });
+    
+    api.ajax({
+        url: baseUrl+'ks/getLogin.ksrun',
+        method: 'post',
+        timeout: 30,
+        dataType: 'json',
+        returnAll:false,
+        data:{
+            body :{
+                ks_data:{
+                    uName:uName,
+                    uPassword:uPassword
+                }
+            }
+        }
+    },function(ret,err){
+        if (ret) {
+            console.log(JSON.stringify(ret));
+            
+            if (ret.ks_data && ret.ks_data.records && ret.ks_data.records.length !=0 ) {
+                api.hideProgress();
+                api.toast({
+                    msg: '登录成功',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                // 跳转到Mg_main
+                $api.setStorage('Mg_uInfo', ret.ks_data.records[0]);
+                api.sendEvent({
+                    name: 'updateUser',
+                    extra: {key:' value'}
+                });
+                api.execScript({
+                    frameName: 'Mg_main_home',
+                    script:'clickToDelZp();'
+                });
+                gotoMg();
+            } else {
+                api.hideProgress();
+                api.toast({
+                    msg: '账号或密码有误',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+            // TODO 
+        } else {
+            api.alert({
+                msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+            });
+        };
+    });
+
+}
+
+
+
+
+
+//跳转到忘记密码服务
+function MgLostPwdbtn()  {
+    var uName = $('#Mg_phone').val();
+    api.openWin({
+        name: 'getBackPwd',
+        url: 'getBackPwd.html',
+        bounces: false,
+        pageParam:uName
+    });
+}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <link rel="stylesheet" href="../css/api.css">
+    <link rel="stylesheet" href="../css/aui.2.0.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <title>Document</title>
+    <style>
+        main {
+            position: relative;
+            height: 100%;
+        }
+
+        .box {
+            position: absolute;
+            left: 50%;
+            top: 160px;
+            margin-left: -25px;
+            width: 50px;
+            height: 50px;
+            transform: rotateZ(0);
+            transition: transform 1s;
+            background: url('../image/menu_scroll.jpg');
+            background-size: cover;
+            z-index: 1;
+        }
+
+        .box.active {
+            transform: rotateZ(3600deg);
+
+            transition: transform 1s;
+        }
+
+        .yz_menu_item {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, .5);
+            font-size: 14px;
+        }
+
+        .yz_menu_item.a:nth-of-type(1) {
+            left: 0px;
+            top: 160px;
+        }
+
+        .yz_menu_item.a:nth-of-type(2) {
+            left: 90px;
+            top: 60px;
+        }
+
+        .yz_menu_item.a:nth-of-type(3) {
+            left: 50%;
+            margin-left: -30px;
+            top: 20px;
+        }
+
+        .yz_menu_item.a:nth-of-type(4) {
+            right: 90px;
+            top: 60px;
+        }
+
+        .yz_menu_item.a:nth-of-type(5) {
+            right: 0px;
+            top: 160px;
+        }
+
+        .yz_menu_item.b {
+            left: 50%;
+            top: 180px;
+            margin-left: -30px;
+        }
+
+        .zj.sj,
+        .jp.sj {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translate(0, -50%);
+            border: 10px solid transparent;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #fff;
+            box-sizing: content-box;
+        }
+
+        .sg.sj {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border: 10px solid transparent;
+            width: 0;
+            height: 0;
+            border-top: 10px solid #fff;
+            box-sizing: content-box;
+        }
+
+        .zp.sj,
+        .jd.sj {
+            position: absolute;
+            top: 50%;
+            margin-left: -100%;
+            transform: translate(0, -50%);
+            border: 10px solid transparent;
+            width: 0;
+            height: 0;
+            border-right: 10px solid #fff;
+            box-sizing: content-box;
+        }
+
+
+
+        /* 提示信息 */
+
+        .yz_menu_item_box {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div>
+            <span class="text-1">更多推荐</span>
+        </div>
+        <div class="yz_menu_item_box">
+            <div class="yz_menu_item a zj ">
+                在家赚钱
+            </div>
+            <div class="yz_menu_item  a jp ">
+                兼职急招
+            </div>
+            <div class="yz_menu_item  a sg ">
+                优质上岗
+            </div>
+            <div class="yz_menu_item  a zp ">
+                大牌直聘
+            </div>
+            <div class="yz_menu_item a jd ">
+                轻松好做
+            </div>
+        </div>
+
+        <div class="box" onclick="rotateT();" tapmode style="display: none;"></div>
+        <div>
+            <span class="title-1">精选发现</span>
+        </div>
+
+    </main>
+</body>
+<script id="Mg_tempList" type="text/template">
+    <ul> 
+        <li class="Mg_temp_item">
+            <div class="title">游戏账号操作，在家轻松兼职&nbsp;&nbsp;
+                <span class="fa fa-thumbs-up"></span>
+            </div>
+            <div class="text clearfix">
+                <span class="laction aui-pull-left"> <i class="fa fa-map-marker"></i>全国 </span>
+                <!-- 公司 -->
+                <span class="cop aui-pull-left">背景德者文化传播有限责任公司</span>
+                <span class="pay aui-pull-right"> 8000 元/月</span>
+            </div>
+        </li>
+    </ul>
+</script>
+<script src="../script/depences/api.js"></script>
+<script src="../script/depences/jquery.min.js"></script>
+<script src="../script/common.js"></script>
+<script src="../script/Mg_main_home_fm.js"></script>
+<script>
+    var b = 100; // arcmenu相对于展示页面的的纵距离
+    apiready = function () {
+        api.parseTapmode();
+        openArcMenu();
+        tipsOpenMenu();
+        MgGetMore();
+        console.log(JSON.stringify(api.frameName));
+        
+    }
+    // 转动
+    function rotateT() {
+        if (!$(".box").hasClass('active')) {
+            $('.box').addClass('active');
+        } else {
+            $('.box').removeClass('active');
+        }
+    }
+
+
+
+    // 下拉函数
+    function MgGetMore() {
+        api.setRefreshHeaderInfo({
+            visible: true,
+            loadingImg: 'widget://image/refresh.png',
+            bgColor: '#fff',
+            textColor: '#020202',
+            textDown: '下拉刷新...',
+            textUp: '松开刷新...',
+            showTime: true,
+        }, function (ret, err) {
+            console.log('下拉刷新操作');
+            setTimeout(() => {
+                api.refreshHeaderLoadDone();
+            }, 500)
+        });
+    }
+
+    // 显示打开的提示信息 附带同步的动画 想下轻扫收拢菜单
+
+    function tipsOpenMenu() {
+        var timer;
+        document.addEventListener('click', function () {
+            if (timer) {
+                return;
+            }
+            console.log('检测点击');
+            if ($('.yz_menu_item').hasClass('a')) {
+                $('.yz_menu_item').addClass('b').removeClass('a');
+                $('.yz_menu_item').css({
+                    "transition": "all .5"
+                })
+                timer = setTimeout(() => {
+                    $('.yz_menu_item').hide(500);
+                    clearTimeout(timer);
+                    timer = null;
+                }, 500);
+            } else if ($('.yz_menu_item').hasClass('b')) {
+                $('.yz_menu_item').addClass('a').removeClass('b');
+                timer = setTimeout(() => {
+                    $('.yz_menu_item').show(500);
+                    clearTimeout(timer)
+                    timer = null;
+
+                }, 500)
+            } else {
+
+            }
+        })
+    }
+
+    // 精确计算每一个气泡的位置 
+    function setEveryBabol() {
+        $(".yz_menu_item").eq(0).css({
+            "left": "0",
+            "top": b - 15 + "px"
+        });
+        $(".yz_menu_item").eq(1).css({
+            "left": "20px",
+            "top": b - .25 * api.frameWidth - 15 + "px",
+        });
+        $(".yz_menu_item").eq(2).css({
+            "left": "0",
+            "top": b - .5 * api.frameWidth - 15 + "px"
+        });
+        $(".yz_menu_item").eq(3).css({
+            "right": "20px",
+            "top": b - .25 * api.frameWidth - 15 + "px",
+        });
+        $(".yz_menu_item").eq(4).css({
+            "right": "0",
+            "top": b - 15 + "px"
+        });
+
+    }
+</script>
+
+</html>
